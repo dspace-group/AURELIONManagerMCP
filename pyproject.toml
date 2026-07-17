@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=80", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aurelion-manager-mcp"
+version = "0.1.0"
+description = "Python MCP server for controlling AURELION Manager"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Apache-2.0" }
+dependencies = [
+    "mcp[cli]>=1.28,<2",
+    "httpx>=0.28",
+    "pydantic>=2.13,<3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.4,<9",
+    "ruff>=0.15.21",
+    "pytest-asyncio>=1.4.0",
+    "pytest-httpx>=0.35.0",
+]
+
+[project.scripts]
+aurelion-manager-mcp = "aurelion_manager_mcp.server:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["aurelion_manager_mcp*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

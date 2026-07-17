@@ -1,0 +1,85 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "GitHub release tag to create or update"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build-release:
+    name: Build Windows executable and publish release archive
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Resolve release metadata
+        shell: pwsh
+        run: |
+          if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+            $tagName = "${{ inputs.tag_name }}"
+          } else {
+            $tagName = "${{ github.ref_name }}"
+          }
+
+          "RELEASE_TAG=$tagName" >> $env:GITHUB_ENV
+          "ARCHIVE_NAME=aurelion-manager-mcp-$tagName-windows-x64.zip" >> $env:GITHUB_ENV
+
+      - name: Install dependencies
+        run: uv sync --frozen --python 3.12
+
+      - name: Generate third-party license report
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path build\release | Out-Null
+          uv run --with pip-licenses python -m piplicenses `
+            --format=plain-vertical `
+            --with-authors `
+            --with-license-file `
+            --ignore-packages pip pip-licenses setuptools wheel prettytable wcwidth `
+            --output-file build\release\THIRD_PARTY_LICENSES.txt
+
+      - name: Build executable
+        shell: pwsh
+        run: uv run --with pyinstaller python -m PyInstaller --clean packaging\pyinstaller.spec
+
+      - name: Package release archive
+        shell: pwsh
+        run: |
+          Copy-Item dist\aurelion-manager-mcp.exe build\release\
+          Copy-Item LICENSE build\release\
+          Compress-Archive `
+            -Path build\release\aurelion-manager-mcp.exe, build\release\LICENSE, build\release\THIRD_PARTY_LICENSES.txt `
+            -DestinationPath $env:ARCHIVE_NAME `
+            -Force
+
+      - name: Upload release archive as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ARCHIVE_NAME }}
+          path: ${{ env.ARCHIVE_NAME }}
+
+      - name: Upload release archive to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          target_commitish: ${{ github.sha }}
+          files: ${{ env.ARCHIVE_NAME }}

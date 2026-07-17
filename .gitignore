@@ -1,0 +1,15 @@
+# Python caches and package metadata
+*.egg-info/
+*.pyc
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+
+# Local environments
+.venv/
+venv/
+
+# Build and release artifacts
+build/
+dist/
+.coverage

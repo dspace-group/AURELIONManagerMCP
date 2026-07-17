@@ -1,0 +1,1 @@
+@uv --directory "%~dp0." run python -m aurelion_manager_mcp.server %*
