@@ -8,6 +8,13 @@ from mcp.types import ToolAnnotations
 from pydantic import BaseModel, Field
 
 from aurelion_manager_mcp import client
+from aurelion_manager_mcp.tools.schemas import (
+    ModelApplication,
+    ModelSimulator,
+    SdBroker,
+    SystemAurelionInstance,
+    VehicleReference,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -46,7 +53,7 @@ class CreateSystemInput(BaseModel):
             "Example: 'ASM'"
         ),
     )
-    model_simulator: dict[str, Any] = Field(
+    model_simulator: ModelSimulator = Field(
         ...,
         description=(
             "Model simulator configuration. Required fields: "
@@ -63,7 +70,7 @@ class CreateSystemInput(BaseModel):
             "'pathScenarioTime': '/Model/time', 'pathScenarioReset': '/Model/reset'}}"
         ),
     )
-    sd_broker: dict[str, Any] = Field(
+    sd_broker: SdBroker = Field(
         ...,
         description=(
             "Simulation Data Broker (SdBroker) connection configuration. "
@@ -73,7 +80,7 @@ class CreateSystemInput(BaseModel):
             "'registerPort': 5556, 'api': {'host': '127.0.0.1', 'port': 8080}}"
         ),
     )
-    aurelion_instances: list[dict[str, Any]] = Field(
+    aurelion_instances: list[SystemAurelionInstance] = Field(
         default_factory=list,
         description=(
             "List of AURELION instance configurations. Each instance needs 'name' and 'host' "
@@ -103,7 +110,7 @@ class CreateSystemInput(BaseModel):
             "(useful to prevent self-occlusion). Default: false."
         ),
     )
-    vehicle: dict[str, Any] | None = Field(
+    vehicle: VehicleReference | None = Field(
         None,
         description=(
             "Vehicle reference to assign to this system. "
@@ -112,7 +119,7 @@ class CreateSystemInput(BaseModel):
             "Example: {'id': 'veh-abc-123', 'name': 'Sedan Front Camera'}"
         ),
     )
-    application: dict[str, Any] | None = Field(
+    application: ModelApplication | None = Field(
         None,
         description=(
             "Optional application (MA) configuration. "
@@ -142,15 +149,15 @@ class UpdateSystemInput(BaseModel):
         ...,
         description="System type: 'ASM' or 'Replay'. Example: 'ASM'",
     )
-    model_simulator: dict[str, Any] = Field(
+    model_simulator: ModelSimulator = Field(
         ...,
         description="Updated model simulator config. Same schema as in create_system.",
     )
-    sd_broker: dict[str, Any] = Field(
+    sd_broker: SdBroker = Field(
         ...,
         description="Updated SD Broker config. Same schema as in create_system.",
     )
-    aurelion_instances: list[dict[str, Any]] = Field(
+    aurelion_instances: list[SystemAurelionInstance] = Field(
         default_factory=list,
         description="Updated AURELION instances list.",
     )
@@ -163,14 +170,14 @@ class UpdateSystemInput(BaseModel):
     hide_ego_from_sensors: bool = Field(
         False, description="Updated hide-ego-from-sensors flag."
     )
-    vehicle: dict[str, Any] | None = Field(
+    vehicle: VehicleReference | None = Field(
         None,
         description=(
             "Updated vehicle reference {'id': str, 'name': str}. "
             "Example: {'id': 'veh-abc-123', 'name': 'Sedan Front Camera'}"
         ),
     )
-    application: dict[str, Any] | None = Field(
+    application: ModelApplication | None = Field(
         None,
         description="Updated application (MA) configuration.",
     )
@@ -237,18 +244,21 @@ async def create_system(input: CreateSystemInput) -> str:
         "name": input.name,
         "description": input.description,
         "type": input.system_type,
-        "modelSimulator": input.model_simulator,
-        "sdBroker": input.sd_broker,
-        "aurelionInstances": input.aurelion_instances,
+        "modelSimulator": input.model_simulator.model_dump(exclude_none=True),
+        "sdBroker": input.sd_broker.model_dump(exclude_none=True),
+        "aurelionInstances": [
+            instance.model_dump(exclude_none=True)
+            for instance in input.aurelion_instances
+        ],
         "sutControlSimFrequency": input.sut_control_sim_frequency,
         "enableSuts": input.enable_suts,
         "numSuts": input.num_suts,
         "hideEgoFromSensors": input.hide_ego_from_sensors,
     }
     if input.vehicle is not None:
-        body["vehicle"] = input.vehicle
+        body["vehicle"] = input.vehicle.model_dump(exclude_none=True)
     if input.application is not None:
-        body["application"] = input.application
+        body["application"] = input.application.model_dump(exclude_none=True)
     result = await client.api_request("POST", "/systems", json_body=body)
     return json.dumps(result, indent=2)
 
@@ -268,18 +278,21 @@ async def update_system(input: UpdateSystemInput) -> str:
         "name": input.name,
         "description": input.description,
         "type": input.system_type,
-        "modelSimulator": input.model_simulator,
-        "sdBroker": input.sd_broker,
-        "aurelionInstances": input.aurelion_instances,
+        "modelSimulator": input.model_simulator.model_dump(exclude_none=True),
+        "sdBroker": input.sd_broker.model_dump(exclude_none=True),
+        "aurelionInstances": [
+            instance.model_dump(exclude_none=True)
+            for instance in input.aurelion_instances
+        ],
         "sutControlSimFrequency": input.sut_control_sim_frequency,
         "enableSuts": input.enable_suts,
         "numSuts": input.num_suts,
         "hideEgoFromSensors": input.hide_ego_from_sensors,
     }
     if input.vehicle is not None:
-        body["vehicle"] = input.vehicle
+        body["vehicle"] = input.vehicle.model_dump(exclude_none=True)
     if input.application is not None:
-        body["application"] = input.application
+        body["application"] = input.application.model_dump(exclude_none=True)
     result = await client.api_request(
         "PUT", f"/systems/{input.system_id}", json_body=body
     )

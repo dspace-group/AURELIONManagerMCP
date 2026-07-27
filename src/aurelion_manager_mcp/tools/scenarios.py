@@ -8,6 +8,7 @@ from mcp.types import ToolAnnotations
 from pydantic import BaseModel, Field
 
 from aurelion_manager_mcp import client
+from aurelion_manager_mcp.tools.schemas import Scenery
 
 
 # ---------------------------------------------------------------------------
@@ -61,7 +62,7 @@ class CreateScenarioInput(BaseModel):
             "Example: 'images/highway_merge.png'"
         ),
     )
-    scenery: dict[str, Any] | None = Field(
+    scenery: Scenery | None = Field(
         None,
         description=(
             "3D scenery configuration. The 'selection' key determines the type: "
@@ -109,7 +110,7 @@ class UpdateScenarioInput(BaseModel):
         None,
         description="Optional updated thumbnail image path.",
     )
-    scenery: dict[str, Any] | None = Field(
+    scenery: Scenery | None = Field(
         None,
         description="Updated scenery configuration. Same schema as in create_scenario.",
     )
@@ -201,7 +202,7 @@ async def create_scenario(input: CreateScenarioInput) -> str:
     if input.image_file is not None:
         body["imageFile"] = input.image_file
     if input.scenery is not None:
-        body["scenery"] = input.scenery
+        body["scenery"] = input.scenery.model_dump(exclude_none=True)
     result = await client.api_request("POST", "/scenarios", json_body=body)
     return json.dumps(result, indent=2)
 
@@ -227,7 +228,7 @@ async def update_scenario(input: UpdateScenarioInput) -> str:
     if input.image_file is not None:
         body["imageFile"] = input.image_file
     if input.scenery is not None:
-        body["scenery"] = input.scenery
+        body["scenery"] = input.scenery.model_dump(exclude_none=True)
     result = await client.api_request(
         "PUT", f"/scenarios/{input.scenario_id}", json_body=body
     )
