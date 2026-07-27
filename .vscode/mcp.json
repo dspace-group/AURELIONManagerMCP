@@ -1,12 +1,11 @@
 {
     "servers": {
-        "aurelion_manager": {
+       "aurelion_manager": {
             "type": "stdio",
-            "command": "python",
-            "args": ["-m", "aurelion_manager_mcp.server"],
+            "command": "AURELIONManagerMCP.cmd",
             "env": {
                 "AURELION_MANAGER_API_URL": "http://localhost:8584"
             }
         }
-    }
+     }
 }

@@ -1,13 +1,13 @@
 """Vehicle tools for the AURELION Manager MCP server."""
 
 import json
-from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 from mcp.types import ToolAnnotations
 from pydantic import BaseModel, Field
 
 from aurelion_manager_mcp import client
+from aurelion_manager_mcp.tools.schemas import ApiVehicleComponent, SensorInstance
 
 
 # ---------------------------------------------------------------------------
@@ -38,7 +38,7 @@ class CreateVehicleInput(BaseModel):
             "Example: 'Test vehicle with a single front-facing camera on the roof'"
         ),
     )
-    components: list[dict[str, Any]] = Field(
+    components: list[ApiVehicleComponent] = Field(
         default_factory=list,
         description=(
             "Vehicle body components. Each object requires at minimum 'name' (string) and 'id' (string). "
@@ -49,7 +49,7 @@ class CreateVehicleInput(BaseModel):
             "'sensorMountingObjects': ['roof', 'front_bumper']}]"
         ),
     )
-    sensor_instances: list[dict[str, Any]] = Field(
+    sensor_instances: list[SensorInstance] = Field(
         default_factory=list,
         description=(
             "Sensor instances attached to this vehicle. Required fields per instance: "
@@ -98,14 +98,14 @@ class UpdateVehicleInput(BaseModel):
         ...,
         description="Updated description. Example: 'Updated — rear camera added'",
     )
-    components: list[dict[str, Any]] = Field(
+    components: list[ApiVehicleComponent] = Field(
         default_factory=list,
         description=(
             "Updated components list. Same schema as in create_vehicle. "
             "Example: [{'id': 'body-01', 'name': 'BodyShell'}]"
         ),
     )
-    sensor_instances: list[dict[str, Any]] = Field(
+    sensor_instances: list[SensorInstance] = Field(
         default_factory=list,
         description="Updated sensor instances. Same schema as in create_vehicle.",
     )
@@ -174,11 +174,14 @@ async def create_vehicle(input: CreateVehicleInput) -> str:
     Precondition: 'sensorId' values in sensor_instances must refer to sensors
     that already exist (use list_sensors to verify).
     """
-    body: dict[str, Any] = {
+    body = {
         "name": input.name,
         "description": input.description,
-        "components": input.components,
-        "sensorInstances": input.sensor_instances,
+        "components": [component.model_dump(exclude_none=True) for component in input.components],
+        "sensorInstances": [
+            sensor_instance.model_dump(exclude_none=True)
+            for sensor_instance in input.sensor_instances
+        ],
     }
     if input.image_file is not None:
         body["imageFile"] = input.image_file
@@ -198,12 +201,15 @@ async def update_vehicle(input: UpdateVehicleInput) -> str:
     Precondition: A project must be open. Use open_project first if needed.
     Precondition: vehicle_id must refer to an existing vehicle (use list_vehicles).
     """
-    body: dict[str, Any] = {
+    body = {
         "id": input.vehicle_id,
         "name": input.name,
         "description": input.description,
-        "components": input.components,
-        "sensorInstances": input.sensor_instances,
+        "components": [component.model_dump(exclude_none=True) for component in input.components],
+        "sensorInstances": [
+            sensor_instance.model_dump(exclude_none=True)
+            for sensor_instance in input.sensor_instances
+        ],
     }
     if input.image_file is not None:
         body["imageFile"] = input.image_file
