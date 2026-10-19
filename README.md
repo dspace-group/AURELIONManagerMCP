@@ -304,3 +304,8 @@ The underlying REST API is documented via OpenAPI at:
 http://<aurelion-manager-host>:8584/api/aurelionmanager/v1.0/swagger
 ```
 
+## Support
+
+For technical questions and issues related to the dSPACE MCP Servers and related GitHub repositories, please [open a GitHub issue](https://github.com/dspace-group/AURELIONManagerMCP/issues).
+As a valued dSPACE customer, you are always welcome to [contact dSPACE Support directly](https://www.dspace.com/go/supportrequest).
+
