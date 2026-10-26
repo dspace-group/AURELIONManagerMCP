@@ -50,14 +50,20 @@ This setup works on both Windows and Linux, as long as `uv` is installed and the
    uv sync --extra dev   # full developer setup
    ```
 
-3. Follow the MCP server installation instructions for your respective MCP client (see documentation for [Claude](https://code.claude.com/docs/en/mcp-quickstart), [Codex](https://developers.openai.com/codex/mcp), [GitHub Copilot](https://docs.github.com/en/copilot/how-tos/provide-context/use-mcp-in-your-ide/extend-copilot-chat-with-mcp), ... ). Use `uv run` to start the server. For reference see [AURELIONManagerMCP.cmd](AURELIONManagerMCP.cmd) for Windows or [AURELIONManagerMCP.sh](AURELIONManagerMCP.sh) for Linux. You can call these scripts directly from your MCP client installation, exemplary `.vscode/mcp.json` entry  (use `AURELIONManagerMCP.sh` instead of `AURELIONManagerMCP.cmd` on Linux):
+3. Follow the MCP server installation instructions for your respective MCP client (see documentation for [Claude](https://code.claude.com/docs/en/mcp-quickstart), [Codex](https://developers.openai.com/codex/mcp), [GitHub Copilot](https://docs.github.com/en/copilot/how-tos/provide-context/use-mcp-in-your-ide/extend-copilot-chat-with-mcp), ... ). Use `uv run` to start the server. For a portable workspace-root `.mcp.json` entry that works across Windows and Linux without hardcoded paths:
 
    ```json
    {
-     "servers": {
+     "mcpServers": {
        "aurelion_manager": {
             "type": "stdio",
-            "command": "<PATH_TO_REPOSITORY>\\AURELIONManagerMCP.cmd",
+            "command": "uv",
+            "args": [
+                "run",
+                "python",
+                "-m",
+                "aurelion_manager_mcp.server"
+            ],
             "env": {
                 "AURELION_MANAGER_API_URL": "http://localhost:8584"
             }
@@ -65,6 +71,8 @@ This setup works on both Windows and Linux, as long as `uv` is installed and the
      }
    }
    ```
+
+   If your MCP client launches outside the repository root, see [AURELIONManagerMCP.cmd](AURELIONManagerMCP.cmd) for Windows or [AURELIONManagerMCP.sh](AURELIONManagerMCP.sh) for Linux.
     Useful development commands:
 
       ```shell
@@ -326,4 +334,3 @@ http://<aurelion-manager-host>:8584/api/aurelionmanager/v1.0/swagger
 
 For technical questions and issues related to the dSPACE MCP Servers and related GitHub repositories, please [open a GitHub issue](https://github.com/dspace-group/AURELIONManagerMCP/issues).
 As a valued dSPACE customer, you are always welcome to [contact dSPACE Support directly](https://www.dspace.com/go/supportrequest).
-
