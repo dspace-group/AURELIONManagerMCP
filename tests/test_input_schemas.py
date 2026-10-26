@@ -9,16 +9,15 @@ def test_vehicle_input_schema_uses_structured_component_and_sensor_definitions()
     schema = CreateVehicleInput.model_json_schema()
 
     assert schema["properties"]["components"]["items"] == {
-        "$ref": "#/$defs/ApiVehicleComponent"
+        "$ref": "#/$defs/ApiVehicleComponentV26_3"
     }
     assert schema["properties"]["sensor_instances"]["items"] == {
-        "$ref": "#/$defs/SensorInstance"
+        "$ref": "#/$defs/SensorInstanceV26_3"
     }
-    assert schema["$defs"]["ApiVehicleComponent"]["required"] == ["name", "id"]
-    assert schema["$defs"]["SensorInstance"]["required"] == [
+    assert schema["$defs"]["ApiVehicleComponentV26_3"]["required"] == ["name", "id"]
+    assert schema["$defs"]["SensorInstanceV26_3"]["required"] == [
         "vehicleComponentId",
         "sensorNumber",
-        "isValid",
         "rotation",
         "position",
         "enable",
@@ -36,13 +35,13 @@ def test_system_input_schema_uses_structured_definitions():
     )
     assert schema["properties"]["sd_broker"]["$ref"] == "#/$defs/SdBroker"
     assert schema["properties"]["aurelion_instances"]["items"] == {
-        "$ref": "#/$defs/SystemAurelionInstance"
+        "$ref": "#/$defs/SystemAurelionInstanceV26_3"
     }
     assert schema["properties"]["vehicle"]["anyOf"][0] == {
         "$ref": "#/$defs/VehicleReference"
     }
     assert schema["properties"]["application"]["anyOf"][0] == {
-        "$ref": "#/$defs/ModelApplication"
+        "$ref": "#/$defs/ModelApplicationV26_2"
     }
 
 

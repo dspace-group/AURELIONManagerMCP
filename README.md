@@ -142,6 +142,10 @@ Set the variable before starting the server or in your MCP host configuration (s
 | `cancel_synchronization` | Cancel an in-progress synchronization |
 | `get_scenario_state` | Get current scenario playback state and time |
 | `control_scenario_state` | Start (`Running`), stop (`Stopped`), or reset (`Reset`) the scenario |
+| `get_synchronization_settings` | Get settings persisted for subsequent synchronizations (26.3+) |
+| `update_synchronization_settings` | Persist settings for subsequent synchronizations (26.3+) |
+| `get_simulation_hooks` | List synchronization hooks and their enabled state (26.3+) |
+| `set_simulation_hooks` | Enable or disable synchronization hooks (26.3+) |
 
 ### Projects & General
 
@@ -230,6 +234,9 @@ Common error codes:
 | `HTTP_400` | 400 | Invalid request body |
 | `CONNECTION_ERROR` | — | AURELION Manager not reachable |
 | `TIMEOUT` | — | Request exceeded 30 s timeout |
+| `UNSUPPORTED_BY_MANAGER_VERSION` | — | A tool or field needs a newer AURELION Manager |
+| `UNSUPPORTED_MANAGER_VERSION` | — | The connected AURELION Manager is older than 26.1 |
+| `UNKNOWN_MANAGER_VERSION` | — | The AURELION Manager version could not be parsed |
 
 ---
 
@@ -255,8 +262,16 @@ src/
 └── aurelion_manager_mcp/
 ├── __init__.py          # Package version
 ├── client.py            # Async HTTP client wrapper with error classification
+├── versioning.py        # AURELION Manager version detection, tool gating, and request body conversion
 ├── server.py            # FastMCP entry point, resources, and prompts
 └── tools/
+    ├── schemas/         # Shared and per-version request models, one module per resource
+    │   ├── common.py    # ApiSchema base and models used by several resources
+    │   ├── vehicles.py
+    │   ├── systems.py
+    │   ├── sensors.py
+    │   ├── scenarios.py
+    │   └── simulation.py
     ├── vehicles.py      # Vehicle CRUD tools
     ├── sensors.py       # Sensor CRUD tools
     ├── scenarios.py     # Scenario CRUD + validation tools
@@ -266,6 +281,9 @@ src/
     └── general.py       # Version and log file tools
 tests/
 ├── conftest.py
+├── openapi/                  # OpenAPI specs of the supported AURELION Manager versions
+├── test_openapi_contract.py  # Request models vs. OpenAPI specs, per version
+├── test_versioning.py
 ├── test_vehicles.py
 ├── test_sensors.py
 ├── test_scenarios.py

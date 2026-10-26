@@ -6,7 +6,7 @@ from mcp.server.fastmcp import FastMCP
 from mcp.types import ToolAnnotations
 from pydantic import BaseModel, Field
 
-from aurelion_manager_mcp import client
+from aurelion_manager_mcp import client, versioning
 
 
 # ---------------------------------------------------------------------------
@@ -39,7 +39,11 @@ async def get_current_project() -> str:
 
     Use this tool to verify that the correct project is open before performing
     any operations on scenarios, sensors, vehicles, or systems.
+
+    Requires AURELION Manager 26.2 or newer.
     """
+    if error := await versioning.require_version(versioning.V26_2, "get_current_project"):
+        return json.dumps(error, indent=2)
     result = await client.api_request("GET", "/projects/current-project")
     return json.dumps(result, indent=2)
 
@@ -56,7 +60,11 @@ async def open_project(input: OpenProjectInput) -> str:
 
     Precondition: The project_folder must point to a valid AURELION Manager
     project directory that exists on the host running AURELION Manager.
+
+    Requires AURELION Manager 26.2 or newer.
     """
+    if error := await versioning.require_version(versioning.V26_2, "open_project"):
+        return json.dumps(error, indent=2)
     body = {"projectFolder": input.project_folder}
     result = await client.api_request("PUT", "/projects/open-project", json_body=body)
     return json.dumps(result, indent=2)

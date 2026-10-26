@@ -7,7 +7,15 @@ from mcp.server.fastmcp import FastMCP
 from mcp.types import ToolAnnotations
 from pydantic import BaseModel, Field
 
-from aurelion_manager_mcp import client
+from aurelion_manager_mcp import client, versioning
+from aurelion_manager_mcp.tools.schemas.simulation import (
+    ApplicationSynchronizationSettings,
+    AsmGtVisualizationSettings,
+    RoadAndSceneryGeneratorSettings,
+    ScenarioControlSettings,
+    SimulationHook,
+)
+
 
 
 # ---------------------------------------------------------------------------
@@ -95,6 +103,46 @@ class ControlScenarioStateInput(BaseModel):
     )
 
 
+class UpdateSynchronizationSettingsInput(BaseModel):
+    asm_gt_visualization: AsmGtVisualizationSettings | None = Field(
+        None,
+        description=(
+            "ASM ground-truth visualization during synchronization. "
+            "Example: {'sensorCones': false, 'laneArrows': true, "
+            "'sensorPoints': false, 'boundingBoxes': true}"
+        ),
+    )
+    scenario_control: ScenarioControlSettings | None = Field(
+        None,
+        description="Scenario control during synchronization. Example: {'autostart': true}",
+    )
+    road_and_scenery_generator: RoadAndSceneryGeneratorSettings | None = Field(
+        None,
+        description=(
+            "Road and Scenery Generator settings. "
+            "Example: {'configPath': 'C:/RSG/config.json'}"
+        ),
+    )
+    application: ApplicationSynchronizationSettings | None = Field(
+        None,
+        description=(
+            "Application behavior during synchronization. "
+            "Example: {'downloadWhenDifferent': true}"
+        ),
+    )
+
+
+class SetSimulationHooksInput(BaseModel):
+    hooks: list[SimulationHook] = Field(
+        ...,
+        description=(
+            "Hooks with their desired enabled state. Use get_simulation_hooks to "
+            "discover the available hook paths. "
+            "Example: [{'path': '<path-from-get_simulation_hooks>', 'isEnabled': true}]"
+        ),
+    )
+
+
 # ---------------------------------------------------------------------------
 # Tool functions
 # ---------------------------------------------------------------------------
@@ -104,11 +152,16 @@ async def get_simulation_state() -> str:
     """Retrieve the current simulation state and configuration from AURELION Manager.
 
     Returns details about the currently loaded system and scenario, the
-    synchronization status, and configuration applied to the AURELION instances.
+    synchronization progress, and configuration applied to the AURELION instances.
+    AURELION Manager 26.3 and newer also report 'synchronizationStatus'
+    ('Synchronized' or 'Not_Synchronized').
     Use get_simulation_diagnostics for connectivity status of individual components.
 
+    Requires AURELION Manager 26.2 or newer.
     Precondition: A project must be open. Use open_project first if needed.
     """
+    if error := await versioning.require_version(versioning.V26_2, "get_simulation_state"):
+        return json.dumps(error, indent=2)
     result = await client.api_request("GET", "/simulation/state")
     return json.dumps(result, indent=2)
 
@@ -138,8 +191,13 @@ async def check_simulation_preconditions(input: CheckPreconditionsInput) -> str:
     Always call this tool before synchronize_simulation to catch configuration
     issues early. All errors must be resolved before synchronization can succeed.
 
+    Requires AURELION Manager 26.2 or newer.
     Precondition: A project must be open. Use open_project first if needed.
     """
+    if error := await versioning.require_version(
+        versioning.V26_2, "check_simulation_preconditions"
+    ):
+        return json.dumps(error, indent=2)
     result = await client.api_request(
         "GET",
         f"/simulation/preconditions/{input.system_id}/{input.scenario_id}",
@@ -163,9 +221,12 @@ async def synchronize_simulation(input: SynchronizeSimulationInput) -> str:
     synchronization process and re-pushes configuration to all AURELION instances.
     Do not call repeatedly without intention.
 
+    Requires AURELION Manager 26.2 or newer.
     Precondition: A project must be open. Use open_project first if needed.
     Precondition: All preconditions must be met (use check_simulation_preconditions).
     """
+    if error := await versioning.require_version(versioning.V26_2, "synchronize_simulation"):
+        return json.dumps(error, indent=2)
     sync_props: dict[str, Any] = {
         "autostart": input.autostart,
         "asmGtBoundingBoxes": input.asm_gt_bounding_boxes,
@@ -192,8 +253,11 @@ async def reset_simulation() -> str:
     configuration. After reset, a new synchronize_simulation call is required
     before the simulation can be started again.
 
+    Requires AURELION Manager 26.2 or newer.
     Precondition: A project must be open. Use open_project first if needed.
     """
+    if error := await versioning.require_version(versioning.V26_2, "reset_simulation"):
+        return json.dumps(error, indent=2)
     result = await client.api_request("PUT", "/simulation/reset")
     return json.dumps(result, indent=2)
 
@@ -204,8 +268,11 @@ async def cancel_synchronization() -> str:
     Stops an ongoing synchronization. Safe to call if synchronization is taking
     too long or if a configuration error was detected mid-process.
 
+    Requires AURELION Manager 26.2 or newer.
     Precondition: A project must be open. Use open_project first if needed.
     """
+    if error := await versioning.require_version(versioning.V26_2, "cancel_synchronization"):
+        return json.dumps(error, indent=2)
     result = await client.api_request("PUT", "/simulation/cancel")
     return json.dumps(result, indent=2)
 
@@ -219,8 +286,11 @@ async def get_scenario_state() -> str:
     Use this tool to monitor whether the scenario is actively running or has
     been stopped. Use control_scenario_state to change the state.
 
+    Requires AURELION Manager 26.2 or newer.
     Precondition: A project must be open and simulation must be synchronized.
     """
+    if error := await versioning.require_version(versioning.V26_2, "get_scenario_state"):
+        return json.dumps(error, indent=2)
     result = await client.api_request("GET", "/scenario-state")
     return json.dumps(result, indent=2)
 
@@ -236,12 +306,94 @@ async def control_scenario_state(input: ControlScenarioStateInput) -> str:
     The simulation must be synchronized before the scenario can be started.
     Use synchronize_simulation first if get_simulation_state shows no active sync.
 
+    Requires AURELION Manager 26.2 or newer.
     Precondition: A project must be open and simulation must be synchronized.
     """
+    if error := await versioning.require_version(versioning.V26_2, "control_scenario_state"):
+        return json.dumps(error, indent=2)
     result = await client.api_request(
         "PUT",
         "/scenario-state",
         json_body={"state": input.state},
+    )
+    return json.dumps(result, indent=2)
+
+
+async def get_synchronization_settings() -> str:
+    """Retrieve the settings persisted for subsequent synchronization operations.
+
+    Returns ASM ground-truth visualization, scenario control (autostart),
+    Road and Scenery Generator, and application settings.
+
+    Requires AURELION Manager 26.3 or newer.
+    Precondition: A project must be open. Use open_project first if needed.
+    """
+    if error := await versioning.require_version(
+        versioning.V26_3, "get_synchronization_settings"
+    ):
+        return json.dumps(error, indent=2)
+    result = await client.api_request("GET", "/simulation/synchronization-settings")
+    return json.dumps(result, indent=2)
+
+
+async def update_synchronization_settings(input: UpdateSynchronizationSettingsInput) -> str:
+    """Persist settings used by subsequent synchronization operations.
+
+    Only the provided setting groups are sent. Use get_synchronization_settings
+    to retrieve the current settings first.
+
+    Requires AURELION Manager 26.3 or newer.
+    Precondition: A project must be open. Use open_project first if needed.
+    """
+    if error := await versioning.require_version(
+        versioning.V26_3, "update_synchronization_settings"
+    ):
+        return json.dumps(error, indent=2)
+    groups = {
+        "asmGtVisualization": input.asm_gt_visualization,
+        "scenarioControl": input.scenario_control,
+        "roadAndSceneryGenerator": input.road_and_scenery_generator,
+        "application": input.application,
+    }
+    body = {
+        key: value.model_dump(exclude_none=True)
+        for key, value in groups.items()
+        if value is not None
+    }
+    result = await client.api_request(
+        "PUT", "/simulation/synchronization-settings", json_body=body
+    )
+    return json.dumps(result, indent=2)
+
+
+async def get_simulation_hooks() -> str:
+    """Retrieve the synchronization hooks and whether each one is enabled.
+
+    Returns a JSON array of {'path': str, 'isEnabled': bool}.
+
+    Requires AURELION Manager 26.3 or newer.
+    Precondition: A project must be open. Use open_project first if needed.
+    """
+    if error := await versioning.require_version(versioning.V26_3, "get_simulation_hooks"):
+        return json.dumps(error, indent=2)
+    result = await client.api_request("GET", "/simulation/hooks")
+    return json.dumps(result, indent=2)
+
+
+async def set_simulation_hooks(input: SetSimulationHooksInput) -> str:
+    """Enable or disable hooks for synchronization.
+
+    Use get_simulation_hooks to discover the available hook paths.
+
+    Requires AURELION Manager 26.3 or newer.
+    Precondition: A project must be open. Use open_project first if needed.
+    """
+    if error := await versioning.require_version(versioning.V26_3, "set_simulation_hooks"):
+        return json.dumps(error, indent=2)
+    result = await client.api_request(
+        "PUT",
+        "/simulation/hooks",
+        json_body=[hook.model_dump() for hook in input.hooks],
     )
     return json.dumps(result, indent=2)
 
@@ -280,3 +432,7 @@ def register_tools(mcp: FastMCP) -> None:
     mcp.tool(annotations=_state_change)(cancel_synchronization)
     mcp.tool(annotations=_read)(get_scenario_state)
     mcp.tool(annotations=_state_change)(control_scenario_state)
+    mcp.tool(annotations=_read)(get_synchronization_settings)
+    mcp.tool(annotations=_state_change)(update_synchronization_settings)
+    mcp.tool(annotations=_read)(get_simulation_hooks)
+    mcp.tool(annotations=_state_change)(set_simulation_hooks)
