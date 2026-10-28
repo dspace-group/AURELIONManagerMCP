@@ -1,0 +1,20 @@
+{
+	"mcpServers": {
+		"aurelion_manager": {
+			"type": "stdio",
+			"command": "uv",
+			"args": [
+				"run",
+				"python",
+				"-m",
+				"aurelion_manager_mcp.server"
+			],
+			"tools": [
+				"*"
+			],
+			"env": {
+				"AURELION_MANAGER_API_URL": "http://localhost:8584"
+			}
+		}
+	}
+}

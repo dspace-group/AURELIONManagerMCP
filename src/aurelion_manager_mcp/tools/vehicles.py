@@ -1,13 +1,18 @@
 """Vehicle tools for the AURELION Manager MCP server."""
 
 import json
+from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 from mcp.types import ToolAnnotations
 from pydantic import BaseModel, Field
 
-from aurelion_manager_mcp import client
-from aurelion_manager_mcp.tools.schemas import ApiVehicleComponent, SensorInstance
+from aurelion_manager_mcp import client, versioning
+from aurelion_manager_mcp.tools.schemas.vehicles import (
+    VEHICLE_USER_INPUT,
+    ApiVehicleComponentV26_3,
+    SensorInstanceV26_3,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -38,7 +43,7 @@ class CreateVehicleInput(BaseModel):
             "Example: 'Test vehicle with a single front-facing camera on the roof'"
         ),
     )
-    components: list[ApiVehicleComponent] = Field(
+    components: list[ApiVehicleComponentV26_3] = Field(
         default_factory=list,
         description=(
             "Vehicle body components. Each object requires at minimum 'name' (string) and 'id' (string). "
@@ -49,7 +54,7 @@ class CreateVehicleInput(BaseModel):
             "'sensorMountingObjects': ['roof', 'front_bumper']}]"
         ),
     )
-    sensor_instances: list[SensorInstance] = Field(
+    sensor_instances: list[SensorInstanceV26_3] = Field(
         default_factory=list,
         description=(
             "Sensor instances attached to this vehicle. Required fields per instance: "
@@ -58,12 +63,11 @@ class CreateVehicleInput(BaseModel):
             "'enable' (boolean), 'sensorNumber' (integer), "
             "'vehicleComponentId' (must match a component 'id' in the components list), "
             "'position' ({'x': float, 'y': float, 'z': float} in metres relative to vehicle origin), "
-            "'rotation' ({'pitch': float, 'yaw': float, 'roll': float} in degrees), "
-            "'isValid' (boolean). "
+            "'rotation' ({'pitch': float, 'yaw': float, 'roll': float} in degrees). "
             "Example: [{'id': 'si-01', 'name': 'Front Camera', 'sensorId': 'cam-abc-123', "
             "'enable': true, 'sensorNumber': 1, 'vehicleComponentId': 'body-01', "
             "'position': {'x': 2.5, 'y': 0.0, 'z': 1.2}, "
-            "'rotation': {'pitch': 0.0, 'yaw': 0.0, 'roll': 0.0}, 'isValid': true}]"
+            "'rotation': {'pitch': 0.0, 'yaw': 0.0, 'roll': 0.0}}]"
         ),
     )
     image_file: str | None = Field(
@@ -98,14 +102,14 @@ class UpdateVehicleInput(BaseModel):
         ...,
         description="Updated description. Example: 'Updated — rear camera added'",
     )
-    components: list[ApiVehicleComponent] = Field(
+    components: list[ApiVehicleComponentV26_3] = Field(
         default_factory=list,
         description=(
             "Updated components list. Same schema as in create_vehicle. "
             "Example: [{'id': 'body-01', 'name': 'BodyShell'}]"
         ),
     )
-    sensor_instances: list[SensorInstance] = Field(
+    sensor_instances: list[SensorInstanceV26_3] = Field(
         default_factory=list,
         description="Updated sensor instances. Same schema as in create_vehicle.",
     )
@@ -132,6 +136,24 @@ class DeleteVehicleInput(BaseModel):
 # ---------------------------------------------------------------------------
 # Tool functions
 # ---------------------------------------------------------------------------
+
+
+async def _vehicle_body(input: CreateVehicleInput | UpdateVehicleInput) -> dict[str, Any]:
+    """Build the request body for the connected manager version, or return an error dict."""
+    body: dict[str, Any] = {
+        "name": input.name,
+        "description": input.description,
+        "components": [component.model_dump(exclude_none=True) for component in input.components],
+        "sensorInstances": [
+            sensor_instance.model_dump(exclude_none=True)
+            for sensor_instance in input.sensor_instances
+        ],
+    }
+    if input.image_file is not None:
+        body["imageFile"] = input.image_file
+    if input.tags is not None:
+        body["tags"] = [{"name": tag} for tag in input.tags]
+    return await versioning.adapt_body(VEHICLE_USER_INPUT, body)
 
 
 async def list_vehicles() -> str:
@@ -174,19 +196,9 @@ async def create_vehicle(input: CreateVehicleInput) -> str:
     Precondition: 'sensorId' values in sensor_instances must refer to sensors
     that already exist (use list_sensors to verify).
     """
-    body = {
-        "name": input.name,
-        "description": input.description,
-        "components": [component.model_dump(exclude_none=True) for component in input.components],
-        "sensorInstances": [
-            sensor_instance.model_dump(exclude_none=True)
-            for sensor_instance in input.sensor_instances
-        ],
-    }
-    if input.image_file is not None:
-        body["imageFile"] = input.image_file
-    if input.tags is not None:
-        body["tags"] = [{"name": tag} for tag in input.tags]
+    body = await _vehicle_body(input)
+    if "error" in body:
+        return json.dumps(body, indent=2)
     result = await client.api_request("POST", "/vehicles", json_body=body)
     return json.dumps(result, indent=2)
 
@@ -201,20 +213,10 @@ async def update_vehicle(input: UpdateVehicleInput) -> str:
     Precondition: A project must be open. Use open_project first if needed.
     Precondition: vehicle_id must refer to an existing vehicle (use list_vehicles).
     """
-    body = {
-        "id": input.vehicle_id,
-        "name": input.name,
-        "description": input.description,
-        "components": [component.model_dump(exclude_none=True) for component in input.components],
-        "sensorInstances": [
-            sensor_instance.model_dump(exclude_none=True)
-            for sensor_instance in input.sensor_instances
-        ],
-    }
-    if input.image_file is not None:
-        body["imageFile"] = input.image_file
-    if input.tags is not None:
-        body["tags"] = [{"name": tag} for tag in input.tags]
+    body = await _vehicle_body(input)
+    if "error" in body:
+        return json.dumps(body, indent=2)
+    body = {"id": input.vehicle_id, **body}
     result = await client.api_request(
         "PUT", f"/vehicles/{input.vehicle_id}", json_body=body
     )

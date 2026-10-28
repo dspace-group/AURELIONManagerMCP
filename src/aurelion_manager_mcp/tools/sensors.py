@@ -7,7 +7,8 @@ from mcp.server.fastmcp import FastMCP
 from mcp.types import ToolAnnotations
 from pydantic import BaseModel, Field
 
-from aurelion_manager_mcp import client
+from aurelion_manager_mcp import client, versioning
+from aurelion_manager_mcp.tools.schemas.sensors import SENSOR_USER_INPUT
 
 
 # ---------------------------------------------------------------------------
@@ -42,6 +43,7 @@ class CreateSensorInput(BaseModel):
         ...,
         description=(
             "Sensor type. Must be one of: 'CAMERA', 'RADAR', 'LIDAR', 'ULTRASONIC', 'INFRARED'. "
+            "'INFRARED' requires AURELION Manager >= 26.2. "
             "Example: 'CAMERA'"
         ),
     )
@@ -95,6 +97,7 @@ class UpdateSensorInput(BaseModel):
         ...,
         description=(
             "Sensor type. Must be one of: 'CAMERA', 'RADAR', 'LIDAR', 'ULTRASONIC', 'INFRARED'. "
+            "'INFRARED' requires AURELION Manager >= 26.2. "
             "Example: 'CAMERA'"
         ),
     )
@@ -132,6 +135,23 @@ class DeleteSensorInput(BaseModel):
 # ---------------------------------------------------------------------------
 # Tool functions
 # ---------------------------------------------------------------------------
+
+
+async def _sensor_body(input: CreateSensorInput | UpdateSensorInput) -> dict[str, Any]:
+    """Build the request body for the connected manager version, or return an error dict."""
+    body: dict[str, Any] = {
+        "name": input.name,
+        "description": input.description,
+        "type": input.sensor_type,
+        "configFile": input.config_file,
+    }
+    if input.image_file is not None:
+        body["imageFile"] = input.image_file
+    if input.additional_files_directory is not None:
+        body["additionalFilesDirectory"] = input.additional_files_directory
+    if input.tags is not None:
+        body["tags"] = [{"name": tag} for tag in input.tags]
+    return await versioning.adapt_body(SENSOR_USER_INPUT, body)
 
 
 async def list_sensors() -> str:
@@ -172,18 +192,9 @@ async def create_sensor(input: CreateSensorInput) -> str:
     Precondition: A project must be open. Use open_project first if needed.
     Precondition: The config_file path must point to a valid sensor config file.
     """
-    body: dict[str, Any] = {
-        "name": input.name,
-        "description": input.description,
-        "type": input.sensor_type,
-        "configFile": input.config_file,
-    }
-    if input.image_file is not None:
-        body["imageFile"] = input.image_file
-    if input.additional_files_directory is not None:
-        body["additionalFilesDirectory"] = input.additional_files_directory
-    if input.tags is not None:
-        body["tags"] = [{"name": tag} for tag in input.tags]
+    body = await _sensor_body(input)
+    if "error" in body:
+        return json.dumps(body, indent=2)
     result = await client.api_request("POST", "/sensors", json_body=body)
     return json.dumps(result, indent=2)
 
@@ -198,19 +209,10 @@ async def update_sensor(input: UpdateSensorInput) -> str:
     Precondition: A project must be open. Use open_project first if needed.
     Precondition: sensor_id must refer to an existing sensor (use list_sensors).
     """
-    body: dict[str, Any] = {
-        "id": input.sensor_id,
-        "name": input.name,
-        "description": input.description,
-        "type": input.sensor_type,
-        "configFile": input.config_file,
-    }
-    if input.image_file is not None:
-        body["imageFile"] = input.image_file
-    if input.additional_files_directory is not None:
-        body["additionalFilesDirectory"] = input.additional_files_directory
-    if input.tags is not None:
-        body["tags"] = [{"name": tag} for tag in input.tags]
+    body = await _sensor_body(input)
+    if "error" in body:
+        return json.dumps(body, indent=2)
+    body = {"id": input.sensor_id, **body}
     result = await client.api_request(
         "PUT", f"/sensors/{input.sensor_id}", json_body=body
     )

@@ -1,0 +1,5340 @@
+{
+  "openapi": "3.0.0",
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "schemas": {
+      "Tag": {
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
+      "SensorInstance": {
+        "properties": {
+          "vehicleComponentId": {
+            "type": "string"
+          },
+          "sensorNumber": {
+            "type": "number",
+            "format": "double"
+          },
+          "mountingObject": {
+            "type": "string"
+          },
+          "rotation": {
+            "properties": {
+              "roll": {
+                "type": "number",
+                "format": "double"
+              },
+              "yaw": {
+                "type": "number",
+                "format": "double"
+              },
+              "pitch": {
+                "type": "number",
+                "format": "double"
+              }
+            },
+            "required": [
+              "roll",
+              "yaw",
+              "pitch"
+            ],
+            "type": "object"
+          },
+          "position": {
+            "properties": {
+              "z": {
+                "type": "number",
+                "format": "double"
+              },
+              "y": {
+                "type": "number",
+                "format": "double"
+              },
+              "x": {
+                "type": "number",
+                "format": "double"
+              }
+            },
+            "required": [
+              "z",
+              "y",
+              "x"
+            ],
+            "type": "object"
+          },
+          "enable": {
+            "type": "boolean"
+          },
+          "sensorId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "vehicleComponentId",
+          "sensorNumber",
+          "rotation",
+          "position",
+          "enable",
+          "sensorId",
+          "name",
+          "id"
+        ],
+        "type": "object"
+      },
+      "AssetProperty": {
+        "description": "This model represents the properties of an asset.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the property."
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the property."
+          },
+          "value": {
+            "type": "string",
+            "description": "The value of the property."
+          },
+          "type": {
+            "type": "string",
+            "description": "The data type of the property."
+          },
+          "isReadOnly": {
+            "type": "boolean",
+            "description": "Determines if the property is read only."
+          },
+          "range": {
+            "type": "string",
+            "description": "Possible values of the property."
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "DataStreamMapping": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the object."
+          },
+          "type": {
+            "type": "string",
+            "description": "The mapping type of the property."
+          },
+          "properties": {
+            "items": {
+              "$ref": "#/components/schemas/AssetProperty"
+            },
+            "type": "array",
+            "description": "List of asset properties."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "DataStream": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the data stream component."
+          },
+          "type": {
+            "type": "string",
+            "description": "The data type of the property."
+          },
+          "id": {
+            "type": "string",
+            "description": "ID of the object."
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/components/schemas/DataStreamMapping"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "AssetType": {
+        "type": "string",
+        "enum": [
+          "custom-asset",
+          "aurelion-asset"
+        ]
+      },
+      "GazeLocation": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "z": {
+            "type": "number",
+            "format": "double"
+          },
+          "y": {
+            "type": "number",
+            "format": "double"
+          },
+          "x": {
+            "type": "number",
+            "format": "double"
+          },
+          "id": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "z",
+          "y",
+          "x",
+          "id"
+        ],
+        "type": "object"
+      },
+      "APIInfraredLightSource": {
+        "properties": {
+          "rotation": {
+            "properties": {
+              "roll": {
+                "type": "number",
+                "format": "double"
+              },
+              "yaw": {
+                "type": "number",
+                "format": "double"
+              },
+              "pitch": {
+                "type": "number",
+                "format": "double"
+              }
+            },
+            "required": [
+              "roll",
+              "yaw",
+              "pitch"
+            ],
+            "type": "object"
+          },
+          "position": {
+            "properties": {
+              "z": {
+                "type": "number",
+                "format": "double"
+              },
+              "y": {
+                "type": "number",
+                "format": "double"
+              },
+              "x": {
+                "type": "number",
+                "format": "double"
+              }
+            },
+            "required": [
+              "z",
+              "y",
+              "x"
+            ],
+            "type": "object"
+          },
+          "attenuationRadius": {
+            "type": "number",
+            "format": "double"
+          },
+          "outerConeAngle": {
+            "type": "number",
+            "format": "double"
+          },
+          "innerConeAngle": {
+            "type": "number",
+            "format": "double"
+          },
+          "intensity": {
+            "type": "number",
+            "format": "double"
+          },
+          "assetPath": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "rotation",
+          "position",
+          "attenuationRadius",
+          "outerConeAngle",
+          "innerConeAngle",
+          "intensity",
+          "assetPath"
+        ],
+        "type": "object"
+      },
+      "APIVehicleComponent": {
+        "properties": {
+          "occupantMonitoring": {
+            "properties": {
+              "infraredLightSources": {
+                "items": {
+                  "$ref": "#/components/schemas/APIInfraredLightSource"
+                },
+                "type": "array"
+              },
+              "driver": {
+                "properties": {
+                  "gazeLocations": {
+                    "items": {
+                      "$ref": "#/components/schemas/GazeLocation"
+                    },
+                    "type": "array"
+                  },
+                  "accessory": {
+                    "type": "string"
+                  },
+                  "seatbeltDataStream": {
+                    "type": "string"
+                  },
+                  "driverAnimationDataStream": {
+                    "type": "string"
+                  },
+                  "lizardOwlRatioDataStream": {
+                    "type": "string"
+                  },
+                  "gazeLocationDataStream": {
+                    "type": "string"
+                  },
+                  "assetPath": {
+                    "type": "string"
+                  },
+                  "assetId": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "assetType": {
+            "$ref": "#/components/schemas/AssetType"
+          },
+          "sensorMountingObjects": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "dataStreams": {
+            "items": {
+              "$ref": "#/components/schemas/DataStream"
+            },
+            "type": "array"
+          },
+          "baseDataStream": {
+            "type": "string"
+          },
+          "assetPath": {
+            "type": "string"
+          },
+          "mappingFile": {
+            "type": "string"
+          },
+          "model3d": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "id"
+        ],
+        "type": "object"
+      },
+      "VehicleUserInput": {
+        "properties": {
+          "components": {
+            "items": {
+              "$ref": "#/components/schemas/APIVehicleComponent"
+            },
+            "type": "array"
+          },
+          "sensorInstances": {
+            "items": {
+              "$ref": "#/components/schemas/SensorInstance"
+            },
+            "type": "array"
+          },
+          "tags": {
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            },
+            "type": "array"
+          },
+          "imageFile": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "components",
+          "sensorInstances",
+          "description",
+          "name"
+        ],
+        "type": "object"
+      },
+      "VehicleUserOutput": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/VehicleUserInput"
+          },
+          {
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "SystemType": {
+        "type": "string",
+        "enum": [
+          "ASM",
+          "Replay"
+        ]
+      },
+      "Simulator": {
+        "type": "string",
+        "enum": [
+          "VEOS",
+          "SCALEXIO"
+        ]
+      },
+      "IpConnection": {
+        "properties": {
+          "port": {
+            "type": "number",
+            "format": "double"
+          },
+          "host": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "port",
+          "host"
+        ],
+        "type": "object"
+      },
+      "CustomDataPort": {
+        "properties": {
+          "updateRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "port": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "updateRate",
+          "port"
+        ],
+        "type": "object"
+      },
+      "ModelSimulatorAdvancedPortConfiguration": {
+        "properties": {
+          "customDataPorts": {
+            "items": {
+              "$ref": "#/components/schemas/CustomDataPort"
+            },
+            "type": "array"
+          },
+          "clifPort": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "customDataPorts"
+        ],
+        "type": "object"
+      },
+      "ModelPathsConfigV1": {
+        "properties": {
+          "pathScenarioTime": {
+            "type": "string"
+          },
+          "pathScenarioState": {
+            "type": "string"
+          },
+          "pathScenarioStop": {
+            "type": "string"
+          },
+          "pathScenarioStart": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "pathScenarioTime",
+          "pathScenarioState",
+          "pathScenarioStop",
+          "pathScenarioStart"
+        ],
+        "type": "object"
+      },
+      "ModelPathsConfigV2": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ModelPathsConfigV1"
+          },
+          {
+            "properties": {
+              "pathScenarioReset": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "pathScenarioReset"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "ModelSimulatorV4": {
+        "properties": {
+          "modelConfiguration": {
+            "$ref": "#/components/schemas/ModelPathsConfigV2"
+          },
+          "advancedPortConfiguration": {
+            "$ref": "#/components/schemas/ModelSimulatorAdvancedPortConfiguration"
+          },
+          "motionData": {
+            "$ref": "#/components/schemas/IpConnection"
+          },
+          "host": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/Simulator"
+          }
+        },
+        "required": [
+          "modelConfiguration",
+          "host",
+          "type"
+        ],
+        "type": "object"
+      },
+      "ModelSimulator": {
+        "$ref": "#/components/schemas/ModelSimulatorV4"
+      },
+      "SdBroker": {
+        "properties": {
+          "ip": {
+            "type": "string"
+          },
+          "publisherPort": {
+            "type": "number",
+            "format": "double"
+          },
+          "registerPort": {
+            "type": "number",
+            "format": "double"
+          },
+          "api": {
+            "$ref": "#/components/schemas/IpConnection"
+          }
+        },
+        "required": [
+          "ip",
+          "publisherPort",
+          "registerPort",
+          "api"
+        ],
+        "type": "object"
+      },
+      "Mapping": {
+        "properties": {
+          "sensorInstanceId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sensorInstanceId"
+        ],
+        "type": "object"
+      },
+      "VEsiConnectionSettingsAPI": {
+        "properties": {
+          "enableManeuverTsSync": {
+            "type": "boolean"
+          },
+          "customDataChannelPort": {
+            "type": "number",
+            "format": "double"
+          },
+          "enableCustomDataChannel": {
+            "type": "boolean"
+          },
+          "osiGTPort": {
+            "type": "number",
+            "format": "double"
+          },
+          "enableOsiGT": {
+            "type": "boolean"
+          },
+          "restbusSimulationPort": {
+            "type": "number",
+            "format": "double"
+          },
+          "enableRestbusSimulation": {
+            "type": "boolean"
+          },
+          "saveFrameAsBinary": {
+            "type": "boolean"
+          },
+          "saveFrameAsPng": {
+            "type": "boolean"
+          },
+          "simulateHeaderSensorId": {
+            "type": "number",
+            "format": "double"
+          },
+          "simulateHeader": {
+            "type": "boolean"
+          },
+          "spsPort": {
+            "type": "number",
+            "format": "double"
+          },
+          "spsIp": {
+            "type": "string"
+          },
+          "streamingPortRangeUpper": {
+            "type": "number",
+            "format": "double"
+          },
+          "streamingPortRangeLower": {
+            "type": "number",
+            "format": "double"
+          },
+          "streamingIp": {
+            "type": "string"
+          },
+          "streamingVersion": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "CvWindowModes": {
+        "type": "string",
+        "enum": [
+          "None",
+          "Fullscreen",
+          "WindowedFullscreen",
+          "Windowed"
+        ],
+        "description": "The available window modes of the composite view."
+      },
+      "CompositeViewSettings": {
+        "properties": {
+          "renderOffScreen": {
+            "type": "boolean",
+            "deprecated": true
+          },
+          "lowLatency": {
+            "type": "boolean"
+          },
+          "enableCompositeView": {
+            "type": "boolean"
+          },
+          "windowPosition": {
+            "type": "string"
+          },
+          "saveFrameAsPng": {
+            "type": "boolean"
+          },
+          "frameSyncMode": {
+            "type": "string",
+            "deprecated": true
+          },
+          "renderExclusively": {
+            "type": "boolean"
+          },
+          "windowMode": {
+            "$ref": "#/components/schemas/CvWindowModes"
+          },
+          "usePredefinedResolution": {
+            "type": "boolean"
+          },
+          "showHeader": {
+            "type": "boolean"
+          },
+          "screenResolution": {
+            "type": "string"
+          },
+          "isTopMostWindow": {
+            "type": "boolean"
+          },
+          "displayInUse": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "type": "object"
+      },
+      "SystemAurelionInstance": {
+        "properties": {
+          "renderOffScreen": {
+            "type": "boolean"
+          },
+          "frameSyncMode": {
+            "type": "string",
+            "enum": [
+              "None",
+              "Default",
+              "LowLatency"
+            ]
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "compositeView": {
+            "$ref": "#/components/schemas/CompositeViewSettings"
+          },
+          "vEsiSetting": {
+            "$ref": "#/components/schemas/VEsiConnectionSettingsAPI"
+          },
+          "connection": {
+            "$ref": "#/components/schemas/IpConnection"
+          },
+          "enableSceneView": {
+            "type": "boolean"
+          },
+          "gpuIndex": {
+            "type": "number",
+            "format": "double"
+          },
+          "enableGpuIndex": {
+            "type": "boolean"
+          },
+          "sampleTime": {
+            "type": "number",
+            "format": "double"
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/components/schemas/Mapping"
+            },
+            "type": "array"
+          },
+          "name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "enabled",
+          "connection",
+          "enableSceneView",
+          "gpuIndex",
+          "enableGpuIndex",
+          "sampleTime",
+          "mappings",
+          "name",
+          "id"
+        ],
+        "type": "object"
+      },
+      "ModelApplication": {
+        "properties": {
+          "maPortConfigPath": {
+            "type": "string"
+          },
+          "filepath": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "maPortConfigPath"
+        ],
+        "type": "object"
+      },
+      "SystemUserInput": {
+        "properties": {
+          "timeStampSource": {
+            "type": "string",
+            "enum": [
+              "SimulationTime",
+              "ManeuverTime"
+            ]
+          },
+          "hideEgoFromSensors": {
+            "type": "boolean"
+          },
+          "application": {
+            "$ref": "#/components/schemas/ModelApplication"
+          },
+          "numSuts": {
+            "type": "number",
+            "format": "double"
+          },
+          "enableSuts": {
+            "type": "boolean"
+          },
+          "sutControlSimFrequency": {
+            "type": "number",
+            "format": "double"
+          },
+          "aurelionInstances": {
+            "items": {
+              "$ref": "#/components/schemas/SystemAurelionInstance"
+            },
+            "type": "array"
+          },
+          "sdBroker": {
+            "$ref": "#/components/schemas/SdBroker"
+          },
+          "modelSimulator": {
+            "$ref": "#/components/schemas/ModelSimulator"
+          },
+          "vehicle": {
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "id"
+            ],
+            "type": "object"
+          },
+          "type": {
+            "$ref": "#/components/schemas/SystemType"
+          },
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "hideEgoFromSensors",
+          "numSuts",
+          "enableSuts",
+          "sutControlSimFrequency",
+          "aurelionInstances",
+          "sdBroker",
+          "modelSimulator",
+          "type",
+          "description",
+          "name"
+        ],
+        "type": "object"
+      },
+      "SystemUserOutput": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/SystemUserInput"
+          },
+          {
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "AurelionInstanceStatus": {
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "displayIndex": {
+            "type": "string"
+          },
+          "display": {
+            "type": "string"
+          },
+          "gpuIndex": {
+            "type": "string"
+          },
+          "gpu": {
+            "type": "string"
+          },
+          "port": {
+            "type": "string"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "isReachable": {
+            "type": "boolean"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "isSimulating": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "displayIndex",
+          "display",
+          "gpuIndex",
+          "gpu",
+          "port",
+          "ip",
+          "isReachable",
+          "isActive",
+          "isSimulating"
+        ],
+        "type": "object"
+      },
+      "AurelionStatus": {
+        "properties": {
+          "aurelionInstances": {
+            "items": {
+              "$ref": "#/components/schemas/AurelionInstanceStatus"
+            },
+            "type": "array"
+          },
+          "versionMismatchAurelionConnections": {
+            "items": {
+              "$ref": "#/components/schemas/IpConnection"
+            },
+            "type": "array"
+          },
+          "unavailableAurelionConnections": {
+            "items": {
+              "$ref": "#/components/schemas/IpConnection"
+            },
+            "type": "array"
+          },
+          "allSimulating": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "aurelionInstances",
+          "versionMismatchAurelionConnections",
+          "unavailableAurelionConnections",
+          "allSimulating"
+        ],
+        "type": "object"
+      },
+      "ModelDeskStatus": {
+        "properties": {
+          "projectPath": {
+            "type": "string"
+          },
+          "experimentLoaded": {
+            "type": "boolean"
+          },
+          "projectLoaded": {
+            "type": "boolean"
+          },
+          "started": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "experimentLoaded",
+          "projectLoaded",
+          "started"
+        ],
+        "type": "object"
+      },
+      "SpsStatus": {
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "connected": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "version",
+          "connected"
+        ],
+        "type": "object"
+      },
+      "SdBrokerStatus": {
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "connected": {
+            "type": "boolean"
+          },
+          "port": {
+            "type": "string"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "instanceId": {
+            "type": "number",
+            "format": "double"
+          },
+          "active": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "version",
+          "connected",
+          "port",
+          "ip",
+          "active"
+        ],
+        "type": "object"
+      },
+      "SdPlayerStatus": {
+        "properties": {
+          "replayFile": {
+            "type": "string"
+          },
+          "remoteEndpointPort": {
+            "type": "string"
+          },
+          "remoteEndpointIp": {
+            "type": "string"
+          },
+          "localEndpointPort": {
+            "type": "string"
+          },
+          "localEndpointIp": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "remoteEndpointPort",
+          "remoteEndpointIp",
+          "localEndpointPort",
+          "localEndpointIp"
+        ],
+        "type": "object"
+      },
+      "SystemStatus": {
+        "properties": {
+          "errors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "systemId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "errors",
+          "warnings",
+          "systemId"
+        ],
+        "type": "object"
+      },
+      "ScenarioStatus": {
+        "properties": {
+          "scenarioId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "scenarioId"
+        ],
+        "type": "object"
+      },
+      "SyncedInfoStatus": {
+        "properties": {
+          "timestamp": {
+            "type": "number",
+            "format": "double"
+          },
+          "scenarioType": {
+            "type": "string"
+          },
+          "scenarioName": {
+            "type": "string"
+          },
+          "scenarioId": {
+            "type": "string"
+          },
+          "systemType": {
+            "type": "string"
+          },
+          "systemName": {
+            "type": "string"
+          },
+          "systemId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "timestamp",
+          "scenarioType",
+          "scenarioName",
+          "scenarioId",
+          "systemType",
+          "systemName",
+          "systemId"
+        ],
+        "type": "object"
+      },
+      "SimulationSystemState": {
+        "properties": {
+          "syncedInfo": {
+            "$ref": "#/components/schemas/SyncedInfoStatus"
+          },
+          "scenario": {
+            "$ref": "#/components/schemas/ScenarioStatus"
+          },
+          "system": {
+            "$ref": "#/components/schemas/SystemStatus"
+          },
+          "simulationDataPlayer": {
+            "$ref": "#/components/schemas/SdPlayerStatus"
+          },
+          "simulationDataHub": {
+            "$ref": "#/components/schemas/SdBrokerStatus"
+          },
+          "sensorPlatformService": {
+            "$ref": "#/components/schemas/SpsStatus"
+          },
+          "modelDesk": {
+            "$ref": "#/components/schemas/ModelDeskStatus"
+          },
+          "aurelion": {
+            "$ref": "#/components/schemas/AurelionStatus"
+          }
+        },
+        "required": [
+          "syncedInfo",
+          "scenario",
+          "system",
+          "simulationDataPlayer",
+          "simulationDataHub",
+          "sensorPlatformService"
+        ],
+        "type": "object"
+      },
+      "LogLevel": {
+        "type": "string",
+        "enum": [
+          "Off",
+          "Fatal",
+          "Error",
+          "Warn",
+          "Info",
+          "Debug",
+          "Trace"
+        ],
+        "description": "Detail level of the log message."
+      },
+      "LogTarget": {
+        "type": "string",
+        "enum": [
+          "ConsoleText",
+          "LogFile"
+        ],
+        "description": "Output target of the log messages."
+      },
+      "LoggingConfig": {
+        "description": "Output type and detail level of the log messages.",
+        "properties": {
+          "level": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LogLevel"
+              }
+            ],
+            "nullable": true
+          },
+          "targets": {
+            "items": {
+              "$ref": "#/components/schemas/LogTarget"
+            },
+            "type": "array",
+            "nullable": true,
+            "description": "Definition of multiple log outputs."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "ConnectionType": {
+        "type": "string",
+        "enum": [
+          "tcp",
+          "zmq",
+          "websocket"
+        ],
+        "description": "Type of connection to the simulator."
+      },
+      "Platform": {
+        "type": "string",
+        "enum": [
+          "unset",
+          "veos",
+          "scalexio"
+        ],
+        "description": "Target platform for AnimationService Discovery"
+      },
+      "CustomDataInterface": {
+        "description": "Custom data interface endpoints from which the SuT can retrieve data.",
+        "properties": {
+          "port": {
+            "type": "number",
+            "format": "double",
+            "description": "Port configuration of connection endpoint."
+          },
+          "sampleTime": {
+            "type": "number",
+            "format": "double",
+            "description": "Defines the sample time."
+          }
+        },
+        "required": [
+          "port",
+          "sampleTime"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "SimulatorConfig": {
+        "description": "Simulator connection and model configuration.",
+        "properties": {
+          "ip": {
+            "type": "string",
+            "description": "IPv4 address configuration of the connection end point."
+          },
+          "port": {
+            "type": "number",
+            "format": "double",
+            "description": "Port configuration of connection endpoint."
+          },
+          "connectionType": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ConnectionType"
+              }
+            ],
+            "nullable": true
+          },
+          "platform": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Platform"
+              }
+            ],
+            "nullable": true
+          },
+          "customDataInterfaces": {
+            "items": {
+              "$ref": "#/components/schemas/CustomDataInterface"
+            },
+            "type": "array",
+            "nullable": true,
+            "description": "List of custom data interfaces."
+          },
+          "clifPort": {
+            "type": "number",
+            "format": "double",
+            "description": "Port configuration of connection endpoint."
+          }
+        },
+        "required": [
+          "ip"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "CounterMode": {
+        "type": "string",
+        "enum": [
+          "PerformanceQueryMode",
+          "PackageCounterMode"
+        ],
+        "description": "Counter mode."
+      },
+      "PromtailConfig": {
+        "description": "Promtail config",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "If enabled, a Promtail instance will be started and send the log to the given lokiUrl."
+          },
+          "lokiUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Url of the Loki endpoint. If no ip is given, the ip of the requesting client is used."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "AlloyConfig": {
+        "description": "Alloy config",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "If enabled, a alloy instance will be started and send the log to the given lokiUrl."
+          },
+          "lokiUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Url of the loki endpoint. If no ip is given, the ip of the requesting client is used."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "SdBrokerConfig": {
+        "description": "Configuration of the SDBroker.",
+        "properties": {
+          "forceClose": {
+            "type": "boolean",
+            "description": "Stops a running SDBroker instance before it is configured."
+          },
+          "basePath": {
+            "type": "string",
+            "description": "Web API URL."
+          },
+          "ip": {
+            "type": "string",
+            "description": "IPv4 address configuration of the connection end point."
+          },
+          "registerPort": {
+            "type": "number",
+            "format": "double",
+            "description": "Port configuration of connection endpoint."
+          },
+          "feedbackPort": {
+            "type": "number",
+            "format": "double",
+            "description": "Port configuration of connection endpoint."
+          },
+          "publisherPort": {
+            "type": "number",
+            "format": "double",
+            "description": "Port configuration of connection endpoint."
+          },
+          "counterMode": {
+            "$ref": "#/components/schemas/CounterMode"
+          },
+          "motionDataSpeed": {
+            "type": "number",
+            "format": "double",
+            "description": "Data sample time in [ms]. This is the update rate at which the SDBroker expects new data packages from the simulator."
+          },
+          "enablePerformanceLogging": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Enable PerformanceLogging"
+          },
+          "promtail": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PromtailConfig"
+              }
+            ],
+            "nullable": true,
+            "deprecated": true
+          },
+          "alloy": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AlloyConfig"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "basePath"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "SceneCreator": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the scene."
+          },
+          "description": {
+            "type": "string",
+            "description": "A description of the scene to create."
+          },
+          "sceneDescriptionPath": {
+            "type": "string",
+            "description": "The relative file path of the scene."
+          },
+          "mapPath": {
+            "type": "string",
+            "description": "The path of the map."
+          },
+          "overwriteExisitingScene": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Determines if a scene with the same path should be overwritten."
+          },
+          "id": {
+            "type": "string",
+            "nullable": true,
+            "description": "The ID of the new created scene."
+          }
+        },
+        "required": [
+          "name",
+          "sceneDescriptionPath",
+          "mapPath",
+          "overwriteExisitingScene"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "AssetCategories": {
+        "type": "string",
+        "enum": [
+          "None",
+          "Asset",
+          "Observer",
+          "Weather",
+          "Widget",
+          "Global",
+          "ASMGTSensor",
+          "CustomAsset",
+          "Environment"
+        ],
+        "description": "The categories of assets."
+      },
+      "NullableVector3": {
+        "description": "A model which represents a vector that can be nullable.",
+        "properties": {
+          "x": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "y": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "z": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "ChildObject": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "description": "Name of the child object."
+          },
+          "id": {
+            "type": "string",
+            "description": "Unique ID instance of the child object."
+          },
+          "properties": {
+            "items": {
+              "$ref": "#/components/schemas/AssetProperty"
+            },
+            "type": "array",
+            "description": "List of asset properties."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "SceneAsset": {
+        "description": "A model for a scene asset.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the asset."
+          },
+          "type": {
+            "$ref": "#/components/schemas/AssetCategories"
+          },
+          "assetPath": {
+            "type": "string",
+            "description": "The path of the asset."
+          },
+          "properties": {
+            "items": {
+              "$ref": "#/components/schemas/AssetProperty"
+            },
+            "type": "array",
+            "description": "Primitive data type properties."
+          },
+          "datastreams": {
+            "items": {
+              "$ref": "#/components/schemas/DataStream"
+            },
+            "type": "array",
+            "description": "List of available data streams."
+          },
+          "boundingBoxMin": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NullableVector3"
+              }
+            ],
+            "nullable": true
+          },
+          "boundingBoxMax": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NullableVector3"
+              }
+            ],
+            "nullable": true
+          },
+          "childs": {
+            "items": {
+              "$ref": "#/components/schemas/ChildObject"
+            },
+            "type": "array",
+            "nullable": true,
+            "description": "Child objects of the asset."
+          },
+          "assetId": {
+            "type": "string",
+            "description": "The ID of the asset which this scene asset is based on."
+          },
+          "id": {
+            "type": "string",
+            "description": "The ID of the model."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "Vector3": {
+        "description": "A model which represents a vector.",
+        "properties": {
+          "x": {
+            "type": "number",
+            "format": "double"
+          },
+          "y": {
+            "type": "number",
+            "format": "double"
+          },
+          "z": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "Vector3Rotation": {
+        "description": "A model which represents the rotation of an asset.",
+        "properties": {
+          "roll": {
+            "type": "number",
+            "format": "double"
+          },
+          "pitch": {
+            "type": "number",
+            "format": "double"
+          },
+          "yaw": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "Vector3Scale": {
+        "description": "A model which represents the scale of an asset.",
+        "properties": {
+          "x": {
+            "type": "number",
+            "format": "double"
+          },
+          "y": {
+            "type": "number",
+            "format": "double"
+          },
+          "z": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "CollisionShape": {
+        "type": "string",
+        "enum": [
+          "None",
+          "Convex",
+          "Box",
+          "Mesh"
+        ],
+        "description": "The collision shape that is used for collision detection (default is Convex)."
+      },
+      "CustomAsset": {
+        "description": "AURELION custom asset that can be uploaded, positioned, and parameterized.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the AURELION custom asset."
+          },
+          "gltfFilePath": {
+            "type": "string",
+            "description": "Path to the AURELION custom asset. The AURELION custom asset must have the glTF file format."
+          },
+          "materialMappingFilePath": {
+            "type": "string",
+            "description": "Path to the material mapping file."
+          },
+          "materialIDTextureFiles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "nullable": true,
+            "description": "The material ID texture file(s). Must be in PNG, BMP or JPG format."
+          },
+          "location": {
+            "$ref": "#/components/schemas/Vector3"
+          },
+          "rotation": {
+            "$ref": "#/components/schemas/Vector3Rotation"
+          },
+          "scale": {
+            "$ref": "#/components/schemas/Vector3Scale"
+          },
+          "saveAsContent": {
+            "type": "boolean",
+            "description": "Determines whether to permanently save the uploaded files."
+          },
+          "id": {
+            "type": "string",
+            "description": "The ID of the AURELION custom asset."
+          },
+          "collision": {
+            "$ref": "#/components/schemas/CollisionShape"
+          },
+          "properties": {
+            "type": "string",
+            "nullable": true,
+            "description": "The properties of the asset."
+          }
+        },
+        "required": [
+          "name",
+          "gltfFilePath",
+          "saveAsContent",
+          "id"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "MaterialDatabase": {
+        "description": "AURELION material database file path.",
+        "properties": {
+          "materialDatabaseFilePath": {
+            "type": "string",
+            "description": "The path to the file which describes the material database."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "LightSettings": {
+        "description": "AURELION light settings archive.",
+        "properties": {
+          "lightSettingsFilePath": {
+            "type": "string",
+            "description": "The path to the archive containing the AURELION light database and light type files."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "CalenderDateTime": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "nullable": true,
+            "description": "Date in the format according to ISO 8601. (e.g., 2022-09-21T08:21:27+00:00)"
+          },
+          "startNightTime": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Time from which lights are activated."
+          },
+          "startDayTime": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Time from which lights are deactivated."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "Coordinates": {
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Latitude coordinate value."
+          },
+          "longitude": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Longitude coordinate value."
+          },
+          "northOffset": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "North offset value."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "AurelionRain": {
+        "properties": {
+          "enable": {
+            "type": "boolean",
+            "description": "Activates the rain."
+          },
+          "intensity": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Strength of rain in [mm/m2] per hour."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "AurelionSnow": {
+        "properties": {
+          "enable": {
+            "type": "boolean",
+            "description": "Activates the snow."
+          },
+          "intensity": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Strength of snow in [mm/m2] per hour."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "AurelionFog": {
+        "properties": {
+          "visibleRange": {
+            "type": "number",
+            "format": "double",
+            "description": "The range of vision in [m]."
+          },
+          "density": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "The density of the fog."
+          },
+          "useVolumetricFog": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "useAdvancedParameters": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "particleDiameter": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "The mean particle diameter in micrometers [μm]."
+          },
+          "standardDeviation": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Standard deviation of the particle diameter in micrometers [μm]."
+          },
+          "particleDensity": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Number of particles in a cubic centimeter."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "AurelionWind": {
+        "properties": {
+          "windSpeed": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Strength of the wind."
+          },
+          "azimuthAngle": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Azimuth angle direction of the wind."
+          },
+          "polarAngle": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Polar angle direction of the wind."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "AurelionSky": {
+        "properties": {
+          "enable": {
+            "type": "boolean",
+            "description": "Activates the sky."
+          },
+          "cloudCoverage": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Coverage of the sky with clouds."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "Weather": {
+        "properties": {
+          "rain": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AurelionRain"
+              }
+            ],
+            "nullable": true
+          },
+          "snow": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AurelionSnow"
+              }
+            ],
+            "nullable": true
+          },
+          "fog": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AurelionFog"
+              }
+            ],
+            "nullable": true
+          },
+          "wind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AurelionWind"
+              }
+            ],
+            "nullable": true
+          },
+          "sky": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AurelionSky"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "AurelionEnvironment": {
+        "description": "AURELION weather, location, date, and time settings.",
+        "properties": {
+          "calenderDateTime": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CalenderDateTime"
+              }
+            ],
+            "nullable": true
+          },
+          "coordinates": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Coordinates"
+              }
+            ],
+            "nullable": true
+          },
+          "weather": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Weather"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "SceneView": {
+        "description": "A model which represents the scene view settings.",
+        "properties": {
+          "fullscreen": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Determines if the scene view should be shown in fullscreen mode."
+          },
+          "maxFps": {
+            "type": "number",
+            "format": "double",
+            "description": "The maximum frames per seconds."
+          },
+          "dataOverlayVisibility": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Determines if the data overlays in general should be visible or not."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "CompositeView": {
+        "description": "A model which represents the composite view settings.",
+        "properties": {
+          "displayInUse": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "The number of the display which should be used for the composition view. -1 means that the default display should be used."
+          },
+          "screenResolution": {
+            "type": "string",
+            "nullable": true,
+            "description": "Resolution of the composite view that is used if usePredefinedResolution is enabled."
+          },
+          "usePredefinedResolution": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Determines if the composite view should be displayed with the given resolution."
+          },
+          "windowMode": {
+            "$ref": "#/components/schemas/CvWindowModes"
+          },
+          "isTopMostWindow": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Determines if the composite view is the top most window on the related display."
+          },
+          "renderExclusively": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Determines if the composite view should be rendered exclusively."
+          },
+          "showHeader": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Determines if the header is shown in the compositve view."
+          },
+          "windowPosition": {
+            "type": "string",
+            "nullable": true,
+            "description": "Window position if composite view is displayed as window."
+          },
+          "frameSyncMode": {
+            "type": "string",
+            "nullable": true
+          },
+          "saveFrameAsPng": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "saves the composite view as png."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "LogVerbosity": {
+        "description": "A model which represents the verbosity of the log.",
+        "properties": {
+          "trace": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "debug": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "info": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "warning": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "error": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "LogSettings": {
+        "description": "A model which represents the log settings.",
+        "properties": {
+          "filePath": {
+            "type": "string",
+            "nullable": true,
+            "description": "The path to the log file."
+          },
+          "verbosity": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LogVerbosity"
+              }
+            ],
+            "nullable": true
+          },
+          "logPerformance": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Determines if additional performance messages should be logged. Only applicable if the log level is info, debug or trace."
+          },
+          "logWithDebugInformation": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Determines if debug information should be logged."
+          },
+          "storagePeriod": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Determines the number of days the log file should be saved. 0 is unlimited. 1 to 255 are days."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "AurelionBrokerConfig": {
+        "description": "Configures the AURELION connection to the SDBroker.",
+        "properties": {
+          "instanceName": {
+            "type": "string",
+            "description": "AURELION instance name."
+          },
+          "sampleTime": {
+            "type": "number",
+            "format": "double",
+            "description": "Defines the sample time in [ms] of data forwarded by the SDBroker."
+          }
+        },
+        "required": [
+          "instanceName",
+          "sampleTime"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "Topic": {
+        "type": "string",
+        "enum": [
+          "ASM_OSI",
+          "SignalBus",
+          "ASM_MSI"
+        ],
+        "description": "topic name"
+      },
+      "AurelionAnimationServiceConfig": {
+        "description": "Configures the AURELION connection to the AnimationService.",
+        "properties": {
+          "instanceName": {
+            "type": "string",
+            "description": "AURELION instance name."
+          },
+          "sampleTime": {
+            "type": "number",
+            "format": "double",
+            "description": "Defines the sample time in [ms] of data forwarded by the SDBroker."
+          },
+          "initialOffset": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Initial offset for receiving data in [ms]."
+          },
+          "periodicOffset": {
+            "items": {
+              "type": "number",
+              "format": "double"
+            },
+            "type": "array",
+            "nullable": true,
+            "description": "Array of offsets for receiving data in [ms] since last message."
+          },
+          "topic": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Topic"
+              }
+            ],
+            "nullable": true
+          },
+          "animationServiceUrlPath": {
+            "type": "string",
+            "nullable": true,
+            "description": "The URL path of the AnimationService, discovered by the SPS."
+          }
+        },
+        "required": [
+          "instanceName",
+          "topic"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "VEsiConnectionSettings": {
+        "description": "The V-ESI connection settings",
+        "properties": {
+          "streamingVersion": {
+            "type": "string",
+            "nullable": true,
+            "description": "The V-ESI version to use."
+          },
+          "streamingIp": {
+            "type": "string",
+            "nullable": true,
+            "description": "The IP address of the streaming."
+          },
+          "streamingPortRangeLower": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Port of the streaming."
+          },
+          "streamingPortRangeUpper": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Port of the streaming."
+          },
+          "spsIp": {
+            "type": "string",
+            "nullable": true,
+            "description": "The IP address of the SPS."
+          },
+          "spsPort": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Port of the SPS."
+          },
+          "autostart": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "If enabled the V-ESI will stream automatically when the simulation is active."
+          },
+          "simulateHeader": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "If enabled the sensor layout header is simulated. Allows streaming without a connected simulation."
+          },
+          "simulateHeaderSensorId": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Sensor ID that will be used in the simulated header for streaming."
+          },
+          "saveFrameAsPng": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "saves the composite view as png."
+          },
+          "saveFrameAsBinary": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "saves V-ESI output as binary file."
+          },
+          "enableRestbusSimulation": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Enables the V-ESI restbus simulation"
+          },
+          "restbusSimulationPort": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "Sets the V-ESI restbus simulation port"
+          },
+          "enableOsiGT": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Enables V-ESI Osi GT"
+          },
+          "osiGTPort": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "The V-ESI OSI GT Port"
+          },
+          "enableCustomDataChannel": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Enables the V-ESI custom data channel"
+          },
+          "customDataChannelPort": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "The V-ESI custom data channel port"
+          },
+          "enableManeuverTsSync": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Enables the V-ESI ManeuverTS sync"
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "ExternalApis": {
+        "description": "Settings of external APIs that AURELION uses.",
+        "properties": {
+          "aurelionManagerIp": {
+            "type": "string",
+            "nullable": true,
+            "description": "IP of the AURELIONManager PC. If set to the placeholder '{ip}' the IP of the sending PC is used."
+          },
+          "aurelionManagerPort": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "REST-API port of the AURELIONManager."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "AurelionSettings": {
+        "description": "AURELION settings.",
+        "properties": {
+          "sceneView": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SceneView"
+              }
+            ],
+            "nullable": true
+          },
+          "compositeView": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CompositeView"
+              }
+            ],
+            "nullable": true
+          },
+          "logSettings": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LogSettings"
+              }
+            ],
+            "nullable": true
+          },
+          "brokerConfig": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AurelionBrokerConfig"
+              }
+            ],
+            "nullable": true
+          },
+          "animationServiceConfig": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AurelionAnimationServiceConfig"
+              }
+            ],
+            "nullable": true
+          },
+          "vEsiConnectionSettings": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/VEsiConnectionSettings"
+              }
+            ],
+            "nullable": true
+          },
+          "externalApis": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ExternalApis"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "SimulationViewModes": {
+        "type": "string",
+        "enum": [
+          "Composite",
+          "Scene",
+          "Vesi",
+          "CompositeAndVesi"
+        ],
+        "description": "The view modes of the simulation."
+      },
+      "Simulation": {
+        "description": "A model which represents the start and stop of a simulation.",
+        "properties": {
+          "simulate": {
+            "type": "boolean",
+            "description": "Determines the start and stop of a simulation."
+          },
+          "viewMode": {
+            "$ref": "#/components/schemas/SimulationViewModes"
+          }
+        },
+        "required": [
+          "simulate",
+          "viewMode"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "SensorTypes": {
+        "type": "string",
+        "enum": [
+          "None",
+          "Camera",
+          "Lidar",
+          "Radar",
+          "Ultrasonic",
+          "InfraredCamera"
+        ],
+        "description": "The different types of sensors."
+      },
+      "SensorConfiguration": {
+        "description": "Sensor configuration.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the sensor configuration."
+          },
+          "configurationFilePath": {
+            "type": "string",
+            "description": "Path to the file that describes the sensor."
+          },
+          "lastModified": {
+            "type": "string",
+            "description": "Time stamp of the last modification of the sensor configuration. This is used to determine if the configuration needs to be retransmitted to AURELION. If null or empty, the sensor configuration is always sent to AURELION."
+          },
+          "sensorType": {
+            "$ref": "#/components/schemas/SensorTypes"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the sensor configuration."
+          }
+        },
+        "required": [
+          "id",
+          "configurationFilePath",
+          "sensorType"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "GeneralSettings": {
+        "description": "General settings for all sensors.",
+        "properties": {
+          "active": {
+            "type": "boolean"
+          },
+          "visualization": {
+            "type": "boolean"
+          },
+          "showIcon": {
+            "type": "boolean"
+          },
+          "sensorNumber": {
+            "type": "number",
+            "format": "double",
+            "description": "The number of the sensor"
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "LocationSettings": {
+        "description": "The location, rotation, and scale.",
+        "properties": {
+          "location": {
+            "$ref": "#/components/schemas/Vector3"
+          },
+          "rotation": {
+            "$ref": "#/components/schemas/Vector3Rotation"
+          },
+          "scale": {
+            "$ref": "#/components/schemas/Vector3Scale"
+          },
+          "mountingPoint": {
+            "type": "string",
+            "description": "Name of the attachment point within the asset."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "SensorProperties": {
+        "description": "A model which represents the properties of sensors.",
+        "properties": {
+          "configurationId": {
+            "type": "string",
+            "description": "The ID of the configuration which describes the sensor."
+          },
+          "general": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GeneralSettings"
+              }
+            ],
+            "nullable": true
+          },
+          "location": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationSettings"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "Sensor": {
+        "description": "A model which represents a sensor.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the sensor."
+          },
+          "type": {
+            "$ref": "#/components/schemas/SensorTypes"
+          },
+          "parentId": {
+            "type": "string",
+            "description": "The ID of the asset that incorporates the sensor."
+          },
+          "properties": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SensorProperties"
+              }
+            ],
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "description": "The ID of the sensor."
+          }
+        },
+        "required": [
+          "type",
+          "parentId"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "AurelionInstance": {
+        "description": "AURELION instance.",
+        "properties": {
+          "basePath": {
+            "type": "string",
+            "description": "Web API URL."
+          },
+          "instanceName": {
+            "type": "string",
+            "description": "AURELION instance name."
+          },
+          "gpu": {
+            "type": "number",
+            "format": "double",
+            "nullable": true,
+            "description": "The index of the graphics card used by the AURELION instance. -1 lets AURELION select the GPU."
+          },
+          "parameters": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "description": "AURELION start parameters."
+          },
+          "synchronizationMode": {
+            "type": "string",
+            "description": "AURELION frame synchronization mode."
+          },
+          "animationTimeSource": {
+            "type": "string",
+            "description": "Time source that is used for animations. SimulationTime: Uses 'simulation time' - 'maneuver start time' as time source. ManeuverTime: Uses the 'ManeuverTime' data stream as time source."
+          },
+          "defaultObserver": {
+            "type": "string",
+            "nullable": true,
+            "description": "The AURELION ID of the observer to be used as the default observer."
+          },
+          "settings": {
+            "$ref": "#/components/schemas/AurelionSettings"
+          },
+          "simulation": {
+            "$ref": "#/components/schemas/Simulation"
+          },
+          "sensorConfigurations": {
+            "items": {
+              "$ref": "#/components/schemas/SensorConfiguration"
+            },
+            "type": "array",
+            "description": "List of sensor configurations."
+          },
+          "sensors": {
+            "items": {
+              "$ref": "#/components/schemas/Sensor"
+            },
+            "type": "array",
+            "description": "A model which represents an array of sensors."
+          },
+          "promtail": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PromtailConfig"
+              }
+            ],
+            "nullable": true,
+            "deprecated": true
+          },
+          "alloy": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AlloyConfig"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "basePath"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "AurelionConfig": {
+        "description": "Configures the AURELION instances in the AURELION tool chain.",
+        "properties": {
+          "forceClose": {
+            "type": "boolean",
+            "description": "Stops and restarts a running AURELION instance before it is configured."
+          },
+          "scene": {
+            "$ref": "#/components/schemas/SceneCreator"
+          },
+          "sceneAssets": {
+            "items": {
+              "$ref": "#/components/schemas/SceneAsset"
+            },
+            "type": "array",
+            "nullable": true,
+            "description": "List of AURELION scene assets."
+          },
+          "customAssets": {
+            "items": {
+              "$ref": "#/components/schemas/CustomAsset"
+            },
+            "type": "array",
+            "nullable": true,
+            "description": "List of AURELION custom assets."
+          },
+          "materialDatabase": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MaterialDatabase"
+              }
+            ],
+            "nullable": true
+          },
+          "lightSettings": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LightSettings"
+              }
+            ],
+            "nullable": true
+          },
+          "environment": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AurelionEnvironment"
+              }
+            ],
+            "nullable": true
+          },
+          "instances": {
+            "items": {
+              "$ref": "#/components/schemas/AurelionInstance"
+            },
+            "type": "array",
+            "nullable": true,
+            "description": "List of AURELION instances."
+          }
+        },
+        "required": [
+          "instances"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "VesiConfig": {
+        "description": "V-ESI connections.",
+        "properties": {
+          "instances": {
+            "type": "number",
+            "format": "double",
+            "description": "Number of V-ESI instances that are part of the system and will connect to the SPS."
+          },
+          "timeout": {
+            "type": "number",
+            "format": "double",
+            "description": "Timeout (in seconds) until all V-ESI instances have to be connected to the SPS."
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "Config": {
+        "description": "Simulation configuration.",
+        "properties": {
+          "logging": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LoggingConfig"
+              }
+            ],
+            "nullable": true
+          },
+          "simulator": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SimulatorConfig"
+              }
+            ],
+            "nullable": true
+          },
+          "broker": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SdBrokerConfig"
+              }
+            ],
+            "nullable": true
+          },
+          "aurelion": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AurelionConfig"
+              }
+            ],
+            "nullable": true
+          },
+          "vesi": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/VesiConfig"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "ErrorCode": {
+        "type": "string",
+        "enum": [
+          "NoError",
+          "LicenseError",
+          "StartupError",
+          "SceneCreationError",
+          "CustomAssetsError",
+          "SceneAssetError",
+          "DefaultObserverError",
+          "SensorConfigurationError",
+          "SensorError",
+          "SettingError",
+          "SimulationError",
+          "ShutdownError",
+          "InternalError",
+          "Cancelled"
+        ],
+        "description": "Action module in which the error occurred."
+      },
+      "ErrorTarget": {
+        "type": "string",
+        "enum": [
+          "None",
+          "SensorPlatformService",
+          "AURELION",
+          "SDBroker",
+          "SDPlayer"
+        ],
+        "description": "Application that caused the error."
+      },
+      "InnerError": {
+        "description": "Detailed error message, which can contain more specific information.",
+        "properties": {
+          "code": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ErrorCode"
+              }
+            ],
+            "nullable": true
+          },
+          "target": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ErrorTarget"
+              }
+            ],
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "description": "Detailed error message."
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "ModelError": {
+        "description": "Error description.",
+        "properties": {
+          "code": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ErrorCode"
+              }
+            ],
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "description": "Detailed error message."
+          },
+          "target": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ErrorTarget"
+              }
+            ],
+            "nullable": true
+          },
+          "innerError": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/InnerError"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "Operation": {
+        "description": "Long running operation.",
+        "properties": {
+          "finished": {
+            "type": "boolean",
+            "description": "Operation completed."
+          },
+          "error": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ModelError"
+              }
+            ],
+            "nullable": true
+          },
+          "stage": {
+            "type": "string",
+            "nullable": true,
+            "description": "Stable identifier of the currently running operation stage."
+          }
+        },
+        "required": [
+          "finished",
+          "error"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "SynchronizationStatus": {
+        "type": "string",
+        "enum": [
+          "Synchronized",
+          "Not_Synchronized"
+        ]
+      },
+      "SimulationInit": {
+        "properties": {
+          "synchronizationStatus": {
+            "$ref": "#/components/schemas/SynchronizationStatus"
+          },
+          "progress": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Operation"
+              }
+            ],
+            "nullable": true
+          },
+          "config": {
+            "$ref": "#/components/schemas/Config"
+          }
+        },
+        "required": [
+          "progress"
+        ],
+        "type": "object"
+      },
+      "SynchronizationSettings": {
+        "properties": {
+          "asmGtVisualization": {
+            "properties": {
+              "sensorCones": {
+                "type": "boolean",
+                "description": "Visualize sensor cones provided by ASM sensor data."
+              },
+              "laneArrows": {
+                "type": "boolean",
+                "description": "Visualize lane arrows provided by ASM sensor data."
+              },
+              "sensorPoints": {
+                "type": "boolean",
+                "description": "Visualize sensor points provided by ASM sensor data."
+              },
+              "boundingBoxes": {
+                "type": "boolean",
+                "description": "Visualize bounding boxes provided by ASM sensor data."
+              }
+            },
+            "required": [
+              "sensorCones",
+              "laneArrows",
+              "sensorPoints",
+              "boundingBoxes"
+            ],
+            "type": "object",
+            "description": "Settings to control ASM ground-truth visualization during synchronization."
+          },
+          "scenarioControl": {
+            "properties": {
+              "autostart": {
+                "type": "boolean",
+                "description": "Start the scenario automatically after synchronization."
+              }
+            },
+            "required": [
+              "autostart"
+            ],
+            "type": "object",
+            "description": "Settings to control the scenario during synchronization."
+          },
+          "roadAndSceneryGenerator": {
+            "properties": {
+              "configPath": {
+                "type": "string",
+                "description": "Path to the RSG configuration file."
+              }
+            },
+            "type": "object",
+            "description": "Settings to control the Road and Scenery Generator during synchronization."
+          },
+          "application": {
+            "properties": {
+              "downloadWhenDifferent": {
+                "type": "boolean",
+                "description": "Replace a downloaded application if present."
+              }
+            },
+            "required": [
+              "downloadWhenDifferent"
+            ],
+            "type": "object",
+            "description": "Settings to control the application behavior during synchronization."
+          }
+        },
+        "type": "object",
+        "description": "Persisted settings used by the synchronization workflow."
+      },
+      "Pick_Hook.path-or-isEnabled_": {
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "isEnabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "path",
+          "isEnabled"
+        ],
+        "type": "object",
+        "description": "From T, pick a set of properties whose keys are in the union K"
+      },
+      "HookV1": {
+        "$ref": "#/components/schemas/Pick_Hook.path-or-isEnabled_"
+      },
+      "CheckConditionResult": {
+        "properties": {
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "errors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "conditionsMet": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "warnings",
+          "errors",
+          "conditionsMet"
+        ],
+        "type": "object"
+      },
+      "Record_string.string_": {
+        "properties": {},
+        "additionalProperties": {
+          "type": "string"
+        },
+        "type": "object",
+        "description": "Construct a type with a set of properties K of type T"
+      },
+      "ScenarioParameterValues": {
+        "$ref": "#/components/schemas/Record_string.string_"
+      },
+      "SynchronizationScenario": {
+        "properties": {
+          "parameterValues": {
+            "$ref": "#/components/schemas/ScenarioParameterValues",
+            "description": "ScenarioParameterValues"
+          }
+        },
+        "type": "object"
+      },
+      "SynchronizationProperties": {
+        "properties": {
+          "scenario": {
+            "$ref": "#/components/schemas/SynchronizationScenario",
+            "description": "SynchronizationScenario"
+          },
+          "asmGtSensorCones": {
+            "type": "boolean",
+            "description": "A flag indicating whether to visualize Sensor cones provided by ASM sensor data"
+          },
+          "asmGtLaneArrows": {
+            "type": "boolean",
+            "description": "A flag indicating whether to visualize Lane arrows provided by ASM sensor data"
+          },
+          "asmGtSensorPoints": {
+            "type": "boolean",
+            "description": "A flag indicating whether to visualize Sensor points provided by ASM sensor data"
+          },
+          "asmGtBoundingBoxes": {
+            "type": "boolean",
+            "description": "A flag indicating whether to visualize  Bounding boxes provided by ASM sensor data"
+          },
+          "autostart": {
+            "type": "boolean",
+            "description": "A flag indicating whether the scenario shall be started automatically"
+          }
+        },
+        "type": "object",
+        "description": "Synchronization properties"
+      },
+      "SensorType": {
+        "enum": [
+          "CAMERA",
+          "RADAR",
+          "LIDAR",
+          "ULTRASONIC",
+          "INFRARED"
+        ],
+        "type": "string"
+      },
+      "SensorBase": {
+        "properties": {
+          "imageFile": {
+            "type": "string"
+          },
+          "additionalFilesDirectory": {
+            "type": "string"
+          },
+          "tags": {
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            },
+            "type": "array"
+          },
+          "type": {
+            "$ref": "#/components/schemas/SensorType"
+          },
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "description",
+          "name"
+        ],
+        "type": "object"
+      },
+      "SensorUserOutput": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/SensorBase"
+          },
+          {
+            "properties": {
+              "configFile": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "SensorUserInput": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/SensorBase"
+          },
+          {
+            "properties": {
+              "configFile": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "configFile"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "ScenarioState": {
+        "type": "string",
+        "enum": [
+          "Running",
+          "Stopped",
+          "Reset"
+        ],
+        "description": "Reflects the possible scenario states"
+      },
+      "ReadOnlyScenarioState": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/ScenarioState"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "Disconnected"
+            ]
+          }
+        ],
+        "description": "Reflects the possible scenario states"
+      },
+      "OpenScenarioState": {
+        "properties": {
+          "time": {
+            "type": "number",
+            "format": "double",
+            "description": "The current scenario time"
+          },
+          "scenario": {
+            "$ref": "#/components/schemas/ReadOnlyScenarioState",
+            "description": "The current scenario state"
+          }
+        },
+        "required": [
+          "time",
+          "scenario"
+        ],
+        "type": "object",
+        "description": "Reflects the current simulation state of a scenario"
+      },
+      "ScenarioType": {
+        "type": "string",
+        "enum": [
+          "Replay",
+          "ModelDesk",
+          "OpenScenario"
+        ],
+        "nullable": false
+      },
+      "SceneryOptions.USE_RSG": {
+        "enum": [
+          "rsg"
+        ],
+        "type": "string"
+      },
+      "VegetationGeneration": {
+        "properties": {
+          "grassGeneration": {
+            "type": "boolean"
+          },
+          "generationCorridorMax": {
+            "type": "number",
+            "format": "double"
+          },
+          "generationCorridorMin": {
+            "type": "number",
+            "format": "double"
+          },
+          "density": {
+            "type": "number",
+            "format": "double"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "grassGeneration",
+          "generationCorridorMax",
+          "generationCorridorMin",
+          "density",
+          "enabled"
+        ],
+        "type": "object"
+      },
+      "MaterialDamageV2": {
+        "properties": {
+          "roadMarkingBrightness": {
+            "type": "number",
+            "format": "double"
+          },
+          "roadMarkingDamage": {
+            "type": "number",
+            "format": "double"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "roadMarkingBrightness",
+          "roadMarkingDamage",
+          "enabled"
+        ],
+        "type": "object"
+      },
+      "MaterialDamage": {
+        "$ref": "#/components/schemas/MaterialDamageV2"
+      },
+      "RsgScenery": {
+        "properties": {
+          "materialDamage": {
+            "$ref": "#/components/schemas/MaterialDamage"
+          },
+          "vegetationGeneration": {
+            "$ref": "#/components/schemas/VegetationGeneration"
+          },
+          "selection": {
+            "$ref": "#/components/schemas/SceneryOptions.USE_RSG"
+          }
+        },
+        "required": [
+          "materialDamage",
+          "vegetationGeneration",
+          "selection"
+        ],
+        "type": "object"
+      },
+      "SceneryOptions.USE_AUR": {
+        "enum": [
+          "aur"
+        ],
+        "type": "string"
+      },
+      "SceneryAurelionEnvironment": {
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "name"
+        ],
+        "type": "object"
+      },
+      "AurScenery": {
+        "properties": {
+          "isAvailable": {
+            "type": "boolean"
+          },
+          "scene": {
+            "$ref": "#/components/schemas/SceneryAurelionEnvironment"
+          },
+          "selection": {
+            "$ref": "#/components/schemas/SceneryOptions.USE_AUR"
+          }
+        },
+        "required": [
+          "isAvailable",
+          "scene",
+          "selection"
+        ],
+        "type": "object"
+      },
+      "SceneryOptions.USE_GLB": {
+        "enum": [
+          "glb"
+        ],
+        "type": "string"
+      },
+      "GlbScenery": {
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "selection": {
+            "$ref": "#/components/schemas/SceneryOptions.USE_GLB"
+          }
+        },
+        "required": [
+          "path",
+          "selection"
+        ],
+        "type": "object"
+      },
+      "Scenery": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/RsgScenery"
+          },
+          {
+            "$ref": "#/components/schemas/AurScenery"
+          },
+          {
+            "$ref": "#/components/schemas/GlbScenery"
+          }
+        ]
+      },
+      "Record_number.string_": {
+        "properties": {},
+        "additionalProperties": {
+          "type": "string"
+        },
+        "type": "object",
+        "description": "Construct a type with a set of properties K of type T"
+      },
+      "ReplayData": {
+        "properties": {
+          "mdfTimestep": {
+            "type": "number",
+            "format": "double"
+          },
+          "sceneDescriptionPath": {
+            "type": "string"
+          },
+          "map": {
+            "type": "string"
+          },
+          "fellows": {
+            "$ref": "#/components/schemas/Record_number.string_"
+          },
+          "mdfPath": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "mdfTimestep",
+          "map",
+          "fellows",
+          "mdfPath"
+        ],
+        "type": "object"
+      },
+      "ScenarioUserOutput": {
+        "properties": {
+          "xoscPath": {
+            "type": "string"
+          },
+          "replayData": {
+            "$ref": "#/components/schemas/ReplayData"
+          },
+          "scenery": {
+            "$ref": "#/components/schemas/Scenery"
+          },
+          "imageFile": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ScenarioType"
+          },
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "description",
+          "name",
+          "id"
+        ],
+        "type": "object"
+      },
+      "ModifiableScenarioType": {
+        "type": "string",
+        "enum": [
+          "ModelDesk",
+          "OpenScenario"
+        ]
+      },
+      "APIAurScenery": {
+        "properties": {
+          "scene": {
+            "$ref": "#/components/schemas/SceneryAurelionEnvironment"
+          },
+          "selection": {
+            "$ref": "#/components/schemas/SceneryOptions.USE_AUR"
+          }
+        },
+        "required": [
+          "scene",
+          "selection"
+        ],
+        "type": "object"
+      },
+      "APIScenery": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/RsgScenery"
+          },
+          {
+            "$ref": "#/components/schemas/APIAurScenery"
+          },
+          {
+            "$ref": "#/components/schemas/GlbScenery"
+          }
+        ]
+      },
+      "CreateScenarioUserInput": {
+        "properties": {
+          "xoscPath": {
+            "type": "string"
+          },
+          "scenery": {
+            "$ref": "#/components/schemas/APIScenery"
+          },
+          "imageFile": {
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ModifiableScenarioType"
+          },
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "description",
+          "name"
+        ],
+        "type": "object"
+      },
+      "UpdateScenarioUserInput": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CreateScenarioUserInput"
+          },
+          {
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "ParameterType": {
+        "type": "string",
+        "enum": [
+          "boolean",
+          "dateTime",
+          "double",
+          "integer",
+          "string",
+          "unsignedInt",
+          "unsignedShort",
+          "int"
+        ]
+      },
+      "StringParam": {
+        "anyOf": [
+          {
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "string"
+                ],
+                "nullable": false
+              }
+            },
+            "required": [
+              "value",
+              "type"
+            ],
+            "type": "object"
+          },
+          {
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "parameter"
+                ],
+                "nullable": false
+              }
+            },
+            "required": [
+              "value",
+              "type"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "Rule": {
+        "type": "string",
+        "enum": [
+          "equalTo",
+          "greaterThan",
+          "lessThan",
+          "greaterOrEqual",
+          "lessOrEqual",
+          "notEqualTo"
+        ]
+      },
+      "ValueConstraint": {
+        "properties": {
+          "value": {
+            "$ref": "#/components/schemas/StringParam"
+          },
+          "rule": {
+            "$ref": "#/components/schemas/Rule"
+          }
+        },
+        "type": "object"
+      },
+      "ValueConstraintGroup": {
+        "properties": {
+          "constraints": {
+            "items": {
+              "$ref": "#/components/schemas/ValueConstraint"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "ParameterDeclaration": {
+        "properties": {
+          "constraintGroups": {
+            "items": {
+              "$ref": "#/components/schemas/ValueConstraintGroup"
+            },
+            "type": "array"
+          },
+          "value": {
+            "$ref": "#/components/schemas/StringParam"
+          },
+          "parameterType": {
+            "$ref": "#/components/schemas/ParameterType"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ValidationIssue": {
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "locations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "fileName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message",
+          "locations",
+          "fileName"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "ValidationFileResult": {
+        "properties": {
+          "issues": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationIssue"
+            },
+            "type": "array"
+          },
+          "fileName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "issues",
+          "fileName"
+        ],
+        "type": "object"
+      },
+      "ValidationResultUserOutput": {
+        "properties": {
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationFileResult"
+            },
+            "type": "array"
+          },
+          "isValid": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "results",
+          "isValid"
+        ],
+        "type": "object"
+      },
+      "OpenProjectInput": {
+        "properties": {
+          "projectFolder": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "projectFolder"
+        ],
+        "type": "object"
+      },
+      "ProjectInfoOutput": {
+        "properties": {
+          "projectFolder": {
+            "type": "string"
+          },
+          "aurVersion": {
+            "type": "string"
+          },
+          "comStackVersion": {
+            "type": "number",
+            "format": "double"
+          },
+          "version": {
+            "type": "number",
+            "format": "double"
+          },
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "projectFolder",
+          "aurVersion",
+          "version",
+          "name"
+        ],
+        "type": "object"
+      },
+      "LogFilePathResponse": {
+        "properties": {
+          "logFilePath": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "AURELION Manager WebAPI V1",
+    "version": "1.0.0",
+    "description": "The AURELION Manager is a software application with a graphical user interface to manage and configure the AURELION system. It is installed with the AURELION tools suite that is required to setup an AURELION system.\n\n<details>\n<summary><strong>API Error Codes:</strong></summary>\n\n| Status Code | Error Code | Description |\n|-------------|------------|-------------|\n| 400 | ERR_MISSING_NAME | Name cannot be empty. |\n| 400 | ERR_IMAGE_FILE_NOT_FOUND | Image file does not exist. |\n| 400 | ERR_REPLAY_SCENARIO_IS_FORBIDDEN | Creation and modification of 'Replay' scenarios is not allowed. |\n| 400 | ERR_NOT_AN_OPENSCENARIO | The scenario is not of the OpenSCENARIO type. |\n| 400 | ERR_MISSING_XOSC_FILE_PATH | OpenSCENARIO file path must be provided for the OpenSCENARIO type. |\n| 400 | ERR_XOSC_FILE_NOT_FOUND | OpenSCENARIO file does not exist. |\n| 400 | ERR_3D_ENV_PATH_NOT_FOUND | 3D environment path does not exist. |\n| 400 | ERR_BAD_REQUEST | Bad request. |\n| 400 | ERR_INVALID_JSON | Could not complete the operation. The JSON structure of the provided data is invalid. |\n| 400 | ERR_VALIDATION_FAILED | Validation failed. |\n| 400 | ERR_ID_MISMATCH | Could not create or update the resource. The provided ID and the ID in the provided data do not match. |\n| 400 | ERR_SCHEMA_VALIDATION_FAILED | Could not create or update the resource. The provided data contains invalid or missing properties. |\n| 400 | ERR_INVALID_SCENERY | The scenario contains an invalid scenery. |\n| 400 | ERR_INVALID_RSG_VEGETATION_GENERATION_DENSITY | The density must be >= 0 & <= 100. |\n| 400 | ERR_INVALID_RSG_VEGETATION_GENERATION_CORRIDOR | The generation corridor end value must be higher than the start value. |\n| 400 | ERR_INVALID_RSG_MATERIAL_DAMAGE_ROAD_MARKING_DAMAGE | Road marking damage must be >= 0 & <= 100. |\n| 400 | ERR_INVALID_RSG_MATERIAL_DAMAGE_ROAD_MARKING_BRIGHTNESS | Road marking brightness must be >= 0 & <= 100. |\n| 400 | ERR_INPUT_VALIDATION_FAILED | Validation failed. The provided structure is correct but the values do not meet the requirements. |\n| 400 | ERR_MISSING_AUR_SCENE_PATH | The AURELION environment path cannot be empty. |\n| 400 | ERR_PROJECT_IS_OUTDATED | The selected project is outdated. Please migrate and try again. |\n| 400 | ERR_SYNC_ALREADY_IN_PROGRESS | A synchronization is already in progress. |\n| 400 | ERR_NO_ACTIVE_SIMULATION | No active simulation. Start a synchronization. |\n| 404 | ERR_NOT_FOUND | Not found. |\n| 412 | ERR_PROJECT_NOT_OPEN | No open project. Open a project first. |\n| 412 | ERR_SYNC_PRECONDITIONS_NOT_MET | Could not synchronize because some preconditions are not met. |\n| 500 | ERR_INTERNAL_SERVER_ERROR | Internal server error. |\n| 500 | ERR_OPENX_VALIDATION_FAILED | Scenario validation failed. |\n\n</details>",
+    "termsOfService": "https://www.dspace.com/de/gmb/home/support/eula.cfm",
+    "license": {
+      "name": "dSPACE End User License"
+    },
+    "contact": {
+      "name": "dSPACE SE & Co. KG",
+      "url": "https://www.dspace.com/de/gmb/home/company/kontakt.cfm",
+      "email": "support@dspace.de"
+    }
+  },
+  "paths": {
+    "/vehicles": {
+      "get": {
+        "operationId": "GetVehicles",
+        "responses": {
+          "200": {
+            "description": "Vehicles retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/VehicleUserOutput"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Retrieve all vehicles of the current project.",
+        "tags": [
+          "Vehicles"
+        ],
+        "security": [],
+        "parameters": []
+      },
+      "post": {
+        "operationId": "CreateVehicle",
+        "responses": {
+          "201": {
+            "description": "Vehicle created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VehicleUserOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Create a new vehicle. The ID will be generated automatically.",
+        "tags": [
+          "Vehicles"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "description": "The vehicle object without ID",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VehicleUserInput",
+                "description": "The vehicle object without ID"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vehicles/{vehicleId}": {
+      "get": {
+        "operationId": "GetVehicle",
+        "responses": {
+          "200": {
+            "description": "Vehicle retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VehicleUserOutput"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Retrieve a vehicle with the given ID.",
+        "tags": [
+          "Vehicles"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "The vehicle's ID",
+            "in": "path",
+            "name": "vehicleId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "put": {
+        "operationId": "UpdateVehicle",
+        "responses": {
+          "200": {
+            "description": "Vehicle updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VehicleUserOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Update an existing vehicle with the given ID.",
+        "tags": [
+          "Vehicles"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "The vehicle's ID",
+            "in": "path",
+            "name": "vehicleId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The complete vehicle object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VehicleUserOutput",
+                "description": "The complete vehicle object"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "DeleteVehicle",
+        "responses": {
+          "200": {
+            "description": "Vehicle deleted."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Delete the vehicle with the given ID.",
+        "tags": [
+          "Vehicles"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "The vehicle's ID",
+            "in": "path",
+            "name": "vehicleId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/systems": {
+      "get": {
+        "operationId": "GetSystems",
+        "responses": {
+          "200": {
+            "description": "Systems retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SystemUserOutput"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Retrieve all systems of the current project.",
+        "tags": [
+          "Systems"
+        ],
+        "security": [],
+        "parameters": []
+      },
+      "post": {
+        "operationId": "CreateSystem",
+        "responses": {
+          "201": {
+            "description": "System created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUserOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Create a new system. The ID will be generated automatically.",
+        "tags": [
+          "Systems"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "description": "The system object without ID",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemUserInput",
+                "description": "The system object without ID"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/systems/{systemId}": {
+      "get": {
+        "operationId": "GetSystem",
+        "responses": {
+          "200": {
+            "description": "System retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUserOutput"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Retrieve a system with the given ID.",
+        "tags": [
+          "Systems"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "The system's ID",
+            "in": "path",
+            "name": "systemId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "put": {
+        "operationId": "UpdateSystem",
+        "responses": {
+          "200": {
+            "description": "System updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemUserOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Update an existing system with the given ID.",
+        "tags": [
+          "Systems"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "The system's ID",
+            "in": "path",
+            "name": "systemId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The complete system object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SystemUserOutput",
+                "description": "The complete system object"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "DeleteSystem",
+        "responses": {
+          "200": {
+            "description": "System deleted."
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Delete the system with the given ID.",
+        "tags": [
+          "Systems"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "The system's ID",
+            "in": "path",
+            "name": "systemId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/simulation/diagnostics": {
+      "get": {
+        "operationId": "GetDiagnostics",
+        "responses": {
+          "200": {
+            "description": "Simulation system status retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimulationSystemState"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Retrieves the current simulation system diagnostics summary.",
+        "tags": [
+          "Simulation"
+        ],
+        "security": [],
+        "parameters": []
+      }
+    },
+    "/simulation/state": {
+      "get": {
+        "operationId": "GetSimulationState",
+        "responses": {
+          "200": {
+            "description": "Simulation system status retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimulationInit"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Retrieves the current simulation config and synchronization status.",
+        "tags": [
+          "Simulation"
+        ],
+        "security": [],
+        "parameters": []
+      }
+    },
+    "/simulation/synchronization-settings": {
+      "get": {
+        "operationId": "GetSynchronizationSettings",
+        "responses": {
+          "200": {
+            "description": "Synchronization settings retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SynchronizationSettings"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Gets settings persisted for subsequent synchronization operations.",
+        "tags": [
+          "Simulation"
+        ],
+        "security": [],
+        "parameters": []
+      },
+      "put": {
+        "operationId": "PutSynchronizationSettings",
+        "responses": {
+          "200": {
+            "description": "Synchronization settings updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SynchronizationSettings"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Persists settings for subsequent synchronization operations.",
+        "tags": [
+          "Simulation"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SynchronizationSettings"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/simulation/hooks": {
+      "get": {
+        "operationId": "GetHookInfo",
+        "responses": {
+          "200": {
+            "description": "Simulation system status retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "isEnabled": {
+                        "type": "boolean"
+                      },
+                      "path": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "isEnabled",
+                      "path"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Retrieves the current hooks and their enabled status.",
+        "tags": [
+          "Simulation"
+        ],
+        "security": [],
+        "parameters": []
+      },
+      "put": {
+        "operationId": "PutHooks",
+        "responses": {
+          "200": {
+            "description": "Hooks updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "isEnabled": {
+                        "type": "boolean"
+                      },
+                      "path": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "isEnabled",
+                      "path"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Could not update hooks."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Enables/disables hooks for synchronization.",
+        "tags": [
+          "Simulation"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/HookV1"
+                },
+                "type": "array"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/simulation/reset": {
+      "put": {
+        "operationId": "ResetSimulationSystem",
+        "responses": {
+          "204": {
+            "description": "Reset successful."
+          },
+          "400": {
+            "description": "No active simulation. Start a synchronization."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Resets the current simulation system. You may resynchronize after this action.",
+        "tags": [
+          "Simulation"
+        ],
+        "security": [],
+        "parameters": []
+      }
+    },
+    "/simulation/cancel": {
+      "put": {
+        "operationId": "CancelSimulationSystem",
+        "responses": {
+          "204": {
+            "description": "Synchronization canceled."
+          },
+          "400": {
+            "description": "No active synchronization."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Cancels the synchronization process.",
+        "tags": [
+          "Simulation"
+        ],
+        "security": [],
+        "parameters": []
+      }
+    },
+    "/simulation/preconditions/{systemId}/{scenarioId}": {
+      "get": {
+        "operationId": "GetPreconditions",
+        "responses": {
+          "200": {
+            "description": "Synchronization preconditions retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckConditionResult"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Retrieves the synchronization preconditions check results for a specific system and scenario.",
+        "tags": [
+          "Simulation"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "The system's ID.",
+            "in": "path",
+            "name": "systemId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The scenario's ID.",
+            "in": "path",
+            "name": "scenarioId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/simulation/synchronize": {
+      "post": {
+        "operationId": "SynchronizeLatest",
+        "responses": {
+          "204": {
+            "description": "Synchronization successful."
+          },
+          "400": {
+            "description": "Synchronization was canceled or is already in progress."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "412": {
+            "description": "Some dependency is not available."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Executes a synchronization with the most recently utilized system and scenario. If synchronization has not yet occurred, default values will be applied.",
+        "tags": [
+          "Simulation"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "description": "Optional synchronization properties",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SynchronizationProperties",
+                "description": "Optional synchronization properties"
+              },
+              "example": {
+                "autostart": false,
+                "asmGtBoundingBoxes": false,
+                "asmGtSensorPoints": false,
+                "asmGtLaneArrows": false,
+                "asmGtSensorCones": false,
+                "scenario": {
+                  "parameterValues": {
+                    "Ego_Speed": "50"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/simulation/synchronize/{systemId}/{scenarioId}": {
+      "post": {
+        "operationId": "Synchronize",
+        "responses": {
+          "204": {
+            "description": "Synchronization successful."
+          },
+          "400": {
+            "description": "Synchronization was canceled or is already in progress."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "412": {
+            "description": "Some dependency is not available."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Executes a synchronization with a specific system and scenario.",
+        "tags": [
+          "Simulation"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "The system's ID.",
+            "in": "path",
+            "name": "systemId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The scenario's ID.",
+            "in": "path",
+            "name": "scenarioId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Optional synchronization properties",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SynchronizationProperties",
+                "description": "Optional synchronization properties"
+              },
+              "example": {
+                "autostart": false,
+                "asmGtBoundingBoxes": false,
+                "asmGtSensorPoints": false,
+                "asmGtLaneArrows": false,
+                "asmGtSensorCones": false,
+                "scenario": {
+                  "parameterValues": {
+                    "Ego_Speed": "50"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sensors": {
+      "get": {
+        "operationId": "GetSensors",
+        "responses": {
+          "200": {
+            "description": "Sensors retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SensorUserOutput"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Retrieve all sensors of the current project.",
+        "tags": [
+          "Sensors"
+        ],
+        "security": [],
+        "parameters": []
+      },
+      "post": {
+        "operationId": "CreateSensor",
+        "responses": {
+          "201": {
+            "description": "Sensor created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SensorUserOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Create a new sensor. The ID will be generated automatically.",
+        "tags": [
+          "Sensors"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "description": "The sensor object without ID",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SensorUserInput",
+                "description": "The sensor object without ID"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sensors/{sensorId}": {
+      "get": {
+        "operationId": "GetSensor",
+        "responses": {
+          "200": {
+            "description": "Sensor retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SensorUserOutput"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Retrieve a sensor with the given ID.",
+        "tags": [
+          "Sensors"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "The sensor's ID",
+            "in": "path",
+            "name": "sensorId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "put": {
+        "operationId": "UpdateSensor",
+        "responses": {
+          "200": {
+            "description": "Sensor updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SensorUserOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Update an existing sensor with the given ID.",
+        "tags": [
+          "Sensors"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "The sensor's ID",
+            "in": "path",
+            "name": "sensorId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The complete sensor object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SensorUserOutput",
+                "description": "The complete sensor object"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "DeleteSensor",
+        "responses": {
+          "200": {
+            "description": "Sensor deleted."
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Delete the sensor with the given ID.",
+        "tags": [
+          "Sensors"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "The sensor's ID",
+            "in": "path",
+            "name": "sensorId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/scenario-state": {
+      "get": {
+        "operationId": "GetScenarioState",
+        "responses": {
+          "200": {
+            "description": "Scenario state retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenScenarioState"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "scenario": "Running",
+                      "time": 1.23
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No active simulation. Start a synchronization."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Retrieves the current state of the scenario used in the simulation (e.g., running, stopped).",
+        "tags": [
+          "ScenarioState"
+        ],
+        "security": [],
+        "parameters": []
+      },
+      "put": {
+        "operationId": "SetScenarioState",
+        "responses": {
+          "200": {
+            "description": "Scenario state changed."
+          },
+          "400": {
+            "description": "Bad request. No active simulation. Start a synchronization."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Starts, stops or resets the scenario used in the simulation.",
+        "tags": [
+          "ScenarioState"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "state": {
+                    "$ref": "#/components/schemas/ScenarioState",
+                    "description": "New state of the scenario",
+                    "example": [
+                      "Running",
+                      "Stopped",
+                      "Reset"
+                    ]
+                  }
+                },
+                "required": [
+                  "state"
+                ],
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/scenarios": {
+      "get": {
+        "operationId": "GetScenarios",
+        "responses": {
+          "200": {
+            "description": "Scenarios retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ScenarioUserOutput"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Retrieve all scenarios in the current project.",
+        "tags": [
+          "Scenarios"
+        ],
+        "security": [],
+        "parameters": []
+      },
+      "post": {
+        "operationId": "CreateScenario",
+        "responses": {
+          "201": {
+            "description": "Scenario created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioUserOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Create a new scenario in the current project. The ID will be generated automatically.",
+        "tags": [
+          "Scenarios"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "description": "The scenario object without ID",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateScenarioUserInput",
+                "description": "The scenario object without ID"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/scenarios/{scenarioId}": {
+      "put": {
+        "operationId": "UpdateScenario",
+        "responses": {
+          "200": {
+            "description": "Scenario updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioUserOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Update an existing scenario with the given ID in the current project.",
+        "tags": [
+          "Scenarios"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "The scenario ID",
+            "in": "path",
+            "name": "scenarioId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The scenario object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateScenarioUserInput",
+                "description": "The scenario object"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "GetScenario",
+        "responses": {
+          "200": {
+            "description": "Scenario retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioUserOutput"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Retrieve a scenario with the given ID in the current project.",
+        "tags": [
+          "Scenarios"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "The scenario ID",
+            "in": "path",
+            "name": "scenarioId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "DeleteScenario",
+        "responses": {
+          "200": {
+            "description": "Scenario deleted."
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Delete the scenario with the given ID.",
+        "tags": [
+          "Scenarios"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "The scenario ID",
+            "in": "path",
+            "name": "scenarioId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/scenarios/{scenarioId}/parameters": {
+      "get": {
+        "operationId": "GetParameters",
+        "responses": {
+          "200": {
+            "description": "Scenario parameters retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ParameterDeclaration"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Get parameters of an OpenX Scenario in the current project.",
+        "tags": [
+          "Scenarios"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "The scenario ID",
+            "in": "path",
+            "name": "scenarioId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/scenarios/{scenarioId}/validation-result": {
+      "get": {
+        "operationId": "GetValidationResult",
+        "responses": {
+          "200": {
+            "description": "Scenario validation status retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationResultUserOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Gets the validation results of an OpenScenario in the current project.",
+        "tags": [
+          "Scenarios"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "description": "The scenario ID",
+            "in": "path",
+            "name": "scenarioId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/projects/open-project": {
+      "put": {
+        "operationId": "OpenProject",
+        "responses": {
+          "200": {
+            "description": "Project opened successfully."
+          },
+          "400": {
+            "description": "The selected project is outdated. Please migrate and try again."
+          },
+          "404": {
+            "description": "Project could not be found. Please check the specified path."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Open or switch to a project with the given path.",
+        "tags": [
+          "Projects"
+        ],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OpenProjectInput"
+              },
+              "example": {
+                "projectFolder": "C:/Path/To/Project/Folder"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/current-project": {
+      "get": {
+        "operationId": "GetCurrentProject",
+        "responses": {
+          "200": {
+            "description": "Project retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectInfoOutput"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "No open project. Open a project first."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Retrieve the opened project.",
+        "tags": [
+          "Projects"
+        ],
+        "security": [],
+        "parameters": []
+      }
+    },
+    "/general/version": {
+      "get": {
+        "operationId": "GetVersion",
+        "responses": {
+          "200": {
+            "description": "Version retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Retrieve the current version of AURELION Manager.",
+        "tags": [
+          "General"
+        ],
+        "security": [],
+        "parameters": []
+      }
+    },
+    "/general/settings/log": {
+      "get": {
+        "operationId": "GetLogFilePath",
+        "responses": {
+          "200": {
+            "description": "Log file path retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogFilePathResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "description": "Retrieves the current location of the merged AURELION Toolchain log file.",
+        "tags": [
+          "General"
+        ],
+        "security": [],
+        "parameters": []
+      }
+    },
+    "/general/exit": {
+      "delete": {
+        "operationId": "Exit",
+        "responses": {
+          "202": {
+            "description": "Shutting down application."
+          }
+        },
+        "description": "Closes the AURELION Manager.",
+        "tags": [
+          "General"
+        ],
+        "security": [],
+        "parameters": []
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "/api/aurelionmanager/v1.0"
+    }
+  ]
+}

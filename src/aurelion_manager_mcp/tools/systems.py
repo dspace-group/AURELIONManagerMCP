@@ -7,12 +7,13 @@ from mcp.server.fastmcp import FastMCP
 from mcp.types import ToolAnnotations
 from pydantic import BaseModel, Field
 
-from aurelion_manager_mcp import client
-from aurelion_manager_mcp.tools.schemas import (
-    ModelApplication,
+from aurelion_manager_mcp import client, versioning
+from aurelion_manager_mcp.tools.schemas.systems import (
+    SYSTEM_USER_INPUT,
+    ModelApplicationV26_2,
     ModelSimulator,
     SdBroker,
-    SystemAurelionInstance,
+    SystemAurelionInstanceV26_3,
     VehicleReference,
 )
 
@@ -80,7 +81,7 @@ class CreateSystemInput(BaseModel):
             "'registerPort': 5556, 'api': {'host': '127.0.0.1', 'port': 8080}}"
         ),
     )
-    aurelion_instances: list[SystemAurelionInstance] = Field(
+    aurelion_instances: list[SystemAurelionInstanceV26_3] = Field(
         default_factory=list,
         description=(
             "List of AURELION instance configurations. Each instance needs 'name' and 'host' "
@@ -119,12 +120,19 @@ class CreateSystemInput(BaseModel):
             "Example: {'id': 'veh-abc-123', 'name': 'Sedan Front Camera'}"
         ),
     )
-    application: ModelApplication | None = Field(
+    application: ModelApplicationV26_2 | None = Field(
         None,
         description=(
             "Optional application (MA) configuration. "
             "Fields: 'maPortConfigPath' (string), 'filepath' (string). "
             "Example: {'maPortConfigPath': 'C:/MA/ports.xml', 'filepath': 'C:/MA/app.exe'}"
+        ),
+    )
+    time_stamp_source: Literal["SimulationTime", "ManeuverTime"] | None = Field(
+        None,
+        description=(
+            "Time source for sensor data time stamps. Requires AURELION Manager >= 26.3. "
+            "Example: 'SimulationTime'"
         ),
     )
 
@@ -157,7 +165,7 @@ class UpdateSystemInput(BaseModel):
         ...,
         description="Updated SD Broker config. Same schema as in create_system.",
     )
-    aurelion_instances: list[SystemAurelionInstance] = Field(
+    aurelion_instances: list[SystemAurelionInstanceV26_3] = Field(
         default_factory=list,
         description="Updated AURELION instances list.",
     )
@@ -177,9 +185,16 @@ class UpdateSystemInput(BaseModel):
             "Example: {'id': 'veh-abc-123', 'name': 'Sedan Front Camera'}"
         ),
     )
-    application: ModelApplication | None = Field(
+    application: ModelApplicationV26_2 | None = Field(
         None,
         description="Updated application (MA) configuration.",
+    )
+    time_stamp_source: Literal["SimulationTime", "ManeuverTime"] | None = Field(
+        None,
+        description=(
+            "Updated time source for sensor data time stamps. "
+            "Requires AURELION Manager >= 26.3."
+        ),
     )
 
 
@@ -196,6 +211,32 @@ class DeleteSystemInput(BaseModel):
 # ---------------------------------------------------------------------------
 # Tool functions
 # ---------------------------------------------------------------------------
+
+
+async def _system_body(input: CreateSystemInput | UpdateSystemInput) -> dict[str, Any]:
+    """Build the request body for the connected manager version, or return an error dict."""
+    body: dict[str, Any] = {
+        "name": input.name,
+        "description": input.description,
+        "type": input.system_type,
+        "modelSimulator": input.model_simulator.model_dump(exclude_none=True),
+        "sdBroker": input.sd_broker.model_dump(exclude_none=True),
+        "aurelionInstances": [
+            instance.model_dump(exclude_none=True)
+            for instance in input.aurelion_instances
+        ],
+        "sutControlSimFrequency": input.sut_control_sim_frequency,
+        "enableSuts": input.enable_suts,
+        "numSuts": input.num_suts,
+        "hideEgoFromSensors": input.hide_ego_from_sensors,
+    }
+    if input.vehicle is not None:
+        body["vehicle"] = input.vehicle.model_dump(exclude_none=True)
+    if input.application is not None:
+        body["application"] = input.application.model_dump(exclude_none=True)
+    if input.time_stamp_source is not None:
+        body["timeStampSource"] = input.time_stamp_source
+    return await versioning.adapt_body(SYSTEM_USER_INPUT, body)
 
 
 async def list_systems() -> str:
@@ -240,25 +281,9 @@ async def create_system(input: CreateSystemInput) -> str:
 
     Precondition: A project must be open. Use open_project first if needed.
     """
-    body: dict[str, Any] = {
-        "name": input.name,
-        "description": input.description,
-        "type": input.system_type,
-        "modelSimulator": input.model_simulator.model_dump(exclude_none=True),
-        "sdBroker": input.sd_broker.model_dump(exclude_none=True),
-        "aurelionInstances": [
-            instance.model_dump(exclude_none=True)
-            for instance in input.aurelion_instances
-        ],
-        "sutControlSimFrequency": input.sut_control_sim_frequency,
-        "enableSuts": input.enable_suts,
-        "numSuts": input.num_suts,
-        "hideEgoFromSensors": input.hide_ego_from_sensors,
-    }
-    if input.vehicle is not None:
-        body["vehicle"] = input.vehicle.model_dump(exclude_none=True)
-    if input.application is not None:
-        body["application"] = input.application.model_dump(exclude_none=True)
+    body = await _system_body(input)
+    if "error" in body:
+        return json.dumps(body, indent=2)
     result = await client.api_request("POST", "/systems", json_body=body)
     return json.dumps(result, indent=2)
 
@@ -273,26 +298,10 @@ async def update_system(input: UpdateSystemInput) -> str:
     Precondition: A project must be open. Use open_project first if needed.
     Precondition: system_id must refer to an existing system (use list_systems).
     """
-    body: dict[str, Any] = {
-        "id": input.system_id,
-        "name": input.name,
-        "description": input.description,
-        "type": input.system_type,
-        "modelSimulator": input.model_simulator.model_dump(exclude_none=True),
-        "sdBroker": input.sd_broker.model_dump(exclude_none=True),
-        "aurelionInstances": [
-            instance.model_dump(exclude_none=True)
-            for instance in input.aurelion_instances
-        ],
-        "sutControlSimFrequency": input.sut_control_sim_frequency,
-        "enableSuts": input.enable_suts,
-        "numSuts": input.num_suts,
-        "hideEgoFromSensors": input.hide_ego_from_sensors,
-    }
-    if input.vehicle is not None:
-        body["vehicle"] = input.vehicle.model_dump(exclude_none=True)
-    if input.application is not None:
-        body["application"] = input.application.model_dump(exclude_none=True)
+    body = await _system_body(input)
+    if "error" in body:
+        return json.dumps(body, indent=2)
+    body = {"id": input.system_id, **body}
     result = await client.api_request(
         "PUT", f"/systems/{input.system_id}", json_body=body
     )

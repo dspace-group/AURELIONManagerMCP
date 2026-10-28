@@ -8,7 +8,7 @@ from mcp.types import ToolAnnotations
 from pydantic import BaseModel, Field
 
 from aurelion_manager_mcp import client
-from aurelion_manager_mcp.tools.schemas import Scenery
+from aurelion_manager_mcp.tools.schemas.scenarios import Scenery
 
 
 # ---------------------------------------------------------------------------

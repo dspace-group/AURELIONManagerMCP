@@ -32,7 +32,13 @@ mcp = FastMCP(
         "control_scenario_state(Running).\n\n"
         f"Connected to AURELIONManager at: {client.get_configured_base_url()} "
         "(override with the AURELION_MANAGER_API_URL environment variable).\n\n"
-        "If you receive a NO_OPEN_PROJECT error, call open_project first."
+        "If you receive a NO_OPEN_PROJECT error, call open_project first.\n\n"
+        "Supports AURELION Manager 26.1, 26.2 and 26.3. Tools and fields marked "
+        "'Requires AURELION Manager >= X' return an UNSUPPORTED_BY_MANAGER_VERSION "
+        "error on older versions; omit them or ask the user to upgrade. "
+        "AURELION Manager 26.1 only supports managing vehicles, sensors, scenarios "
+        "and systems plus get_simulation_diagnostics; there is no project or "
+        "simulation control."
     ),
 )
 
@@ -144,8 +150,7 @@ async def resource_system(system_id: str) -> str:
 )
 async def resource_simulation_state() -> str:
     """Current simulation state and configuration."""
-    result = await client.api_request("GET", "/simulation/state")
-    return json.dumps(result, indent=2)
+    return await simulation.get_simulation_state()
 
 
 # ── Prompts ─────────────────────────────────────────────────────────────────
@@ -241,8 +246,7 @@ adding an entry to `sensor_instances`:
   "sensorNumber": 1,
   "vehicleComponentId": "<matching-component-id>",
   "position": {{"x": 2.5, "y": 0.0, "z": 1.2}},
-  "rotation": {{"pitch": 0.0, "yaw": 0.0, "roll": 0.0}},
-  "isValid": true
+  "rotation": {{"pitch": 0.0, "yaw": 0.0, "roll": 0.0}}
 }}
 ```
 

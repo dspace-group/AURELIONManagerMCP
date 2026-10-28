@@ -50,7 +50,7 @@ wheels = [
 
 [[package]]
 name = "aurelion-manager-mcp"
-version = "0.1.0"
+version = "0.3.0"
 source = { editable = "." }
 dependencies = [
     { name = "httpx" },
@@ -69,7 +69,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "httpx", specifier = ">=0.28" },
-    { name = "mcp", extras = ["cli"], specifier = ">=1.28,<2" },
+    { name = "mcp", extras = ["cli"], specifier = ">=1.28,<3" },
     { name = "pydantic", specifier = ">=2.13,<3" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=9.0.3,<10" },
     { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=1.4.0" },

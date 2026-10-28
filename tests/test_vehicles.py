@@ -3,6 +3,7 @@
 import json
 
 import httpx
+import pytest
 from aurelion_manager_mcp import client
 from aurelion_manager_mcp.tools.vehicles import (
     CreateVehicleInput,
@@ -17,6 +18,8 @@ from aurelion_manager_mcp.tools.vehicles import (
 )
 
 BASE = f"{client.AURELION_MANAGER_API_URL}{client.API_BASE_PATH}"
+
+pytestmark = pytest.mark.usefixtures("manager_version")
 
 SAMPLE_VEHICLE = {
     "id": "veh-abc-123",

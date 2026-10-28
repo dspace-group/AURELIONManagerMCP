@@ -50,14 +50,20 @@ This setup works on both Windows and Linux, as long as `uv` is installed and the
    uv sync --extra dev   # full developer setup
    ```
 
-3. Follow the MCP server installation instructions for your respective MCP client (see documentation for [Claude](https://code.claude.com/docs/en/mcp-quickstart), [Codex](https://developers.openai.com/codex/mcp), [GitHub Copilot](https://docs.github.com/en/copilot/how-tos/provide-context/use-mcp-in-your-ide/extend-copilot-chat-with-mcp), ... ). Use `uv run` to start the server. For reference see [AURELIONManagerMCP.cmd](AURELIONManagerMCP.cmd) for Windows or [AURELIONManagerMCP.sh](AURELIONManagerMCP.sh) for Linux. You can call these scripts directly from your MCP client installation, exemplary `.vscode/mcp.json` entry  (use `AURELIONManagerMCP.sh` instead of `AURELIONManagerMCP.cmd` on Linux):
+3. Follow the MCP server installation instructions for your respective MCP client (see documentation for [Claude](https://code.claude.com/docs/en/mcp-quickstart), [Codex](https://developers.openai.com/codex/mcp), [GitHub Copilot](https://docs.github.com/en/copilot/how-tos/provide-context/use-mcp-in-your-ide/extend-copilot-chat-with-mcp), ... ). Use `uv run` to start the server. For a portable workspace-root `.mcp.json` entry that works across Windows and Linux without hardcoded paths:
 
    ```json
    {
-     "servers": {
+     "mcpServers": {
        "aurelion_manager": {
             "type": "stdio",
-            "command": "<PATH_TO_REPOSITORY>\\AURELIONManagerMCP.cmd",
+            "command": "uv",
+            "args": [
+                "run",
+                "python",
+                "-m",
+                "aurelion_manager_mcp.server"
+            ],
             "env": {
                 "AURELION_MANAGER_API_URL": "http://localhost:8584"
             }
@@ -65,6 +71,8 @@ This setup works on both Windows and Linux, as long as `uv` is installed and the
      }
    }
    ```
+
+   If your MCP client launches outside the repository root, see [AURELIONManagerMCP.cmd](AURELIONManagerMCP.cmd) for Windows or [AURELIONManagerMCP.sh](AURELIONManagerMCP.sh) for Linux.
     Useful development commands:
 
       ```shell
@@ -142,6 +150,10 @@ Set the variable before starting the server or in your MCP host configuration (s
 | `cancel_synchronization` | Cancel an in-progress synchronization |
 | `get_scenario_state` | Get current scenario playback state and time |
 | `control_scenario_state` | Start (`Running`), stop (`Stopped`), or reset (`Reset`) the scenario |
+| `get_synchronization_settings` | Get settings persisted for subsequent synchronizations (26.3+) |
+| `update_synchronization_settings` | Persist settings for subsequent synchronizations (26.3+) |
+| `get_simulation_hooks` | List synchronization hooks and their enabled state (26.3+) |
+| `set_simulation_hooks` | Enable or disable synchronization hooks (26.3+) |
 
 ### Projects & General
 
@@ -230,6 +242,9 @@ Common error codes:
 | `HTTP_400` | 400 | Invalid request body |
 | `CONNECTION_ERROR` | — | AURELION Manager not reachable |
 | `TIMEOUT` | — | Request exceeded 30 s timeout |
+| `UNSUPPORTED_BY_MANAGER_VERSION` | — | A tool or field needs a newer AURELION Manager |
+| `UNSUPPORTED_MANAGER_VERSION` | — | The connected AURELION Manager is older than 26.1 |
+| `UNKNOWN_MANAGER_VERSION` | — | The AURELION Manager version could not be parsed |
 
 ---
 
@@ -255,8 +270,16 @@ src/
 └── aurelion_manager_mcp/
 ├── __init__.py          # Package version
 ├── client.py            # Async HTTP client wrapper with error classification
+├── versioning.py        # AURELION Manager version detection, tool gating, and request body conversion
 ├── server.py            # FastMCP entry point, resources, and prompts
 └── tools/
+    ├── schemas/         # Shared and per-version request models, one module per resource
+    │   ├── common.py    # ApiSchema base and models used by several resources
+    │   ├── vehicles.py
+    │   ├── systems.py
+    │   ├── sensors.py
+    │   ├── scenarios.py
+    │   └── simulation.py
     ├── vehicles.py      # Vehicle CRUD tools
     ├── sensors.py       # Sensor CRUD tools
     ├── scenarios.py     # Scenario CRUD + validation tools
@@ -266,6 +289,9 @@ src/
     └── general.py       # Version and log file tools
 tests/
 ├── conftest.py
+├── openapi/                  # OpenAPI specs of the supported AURELION Manager versions
+├── test_openapi_contract.py  # Request models vs. OpenAPI specs, per version
+├── test_versioning.py
 ├── test_vehicles.py
 ├── test_sensors.py
 ├── test_scenarios.py
@@ -308,4 +334,3 @@ http://<aurelion-manager-host>:8584/api/aurelionmanager/v1.0/swagger
 
 For technical questions and issues related to the dSPACE MCP Servers and related GitHub repositories, please [open a GitHub issue](https://github.com/dspace-group/AURELIONManagerMCP/issues).
 As a valued dSPACE customer, you are always welcome to [contact dSPACE Support directly](https://www.dspace.com/go/supportrequest).
-
